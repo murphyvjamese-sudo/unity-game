@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: InvasionFighter
+  m_Controller: {fileID: 9100000, guid: a0c1453503b8c43f5bd96f0a3ce3e05c, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 36dbea719167b4d6198f8045eb7c1aec, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 36dbea719167b4d6198f8045eb7c1aec, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: e648781e25bdb4f88a1e6e3a80fa1de3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e648781e25bdb4f88a1e6e3a80fa1de3, type: 2}
