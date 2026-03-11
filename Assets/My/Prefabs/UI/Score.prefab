@@ -9,6 +9,26 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: stroke.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
       propertyPath: isCameraRelative
       value: 1
       objectReference: {fileID: 0}

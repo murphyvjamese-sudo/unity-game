@@ -1318,6 +1318,9 @@ public class Systems : MonoBehaviour
                     letterSR.material = text.material;
                     letterSR.GetPropertyBlock(mpb);
                     mpb.SetFloat("_IsInverted", inversionAsFloat);  // assumes your shader has a "_Brightness" property
+                    mpb.SetFloat("_IsText", 1);
+                    mpb.SetColor("_Fill", text.fill);
+                    mpb.SetColor("_Stroke", text.stroke);
                     letterSR.SetPropertyBlock(mpb);
                 }  //else if letter is null, that means it is a spacebar, and all you have to do is move the cursor, without creating a new child obj letter representation.
                 UpdateCursorPosition(text);

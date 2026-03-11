@@ -17,7 +17,7 @@ public static class Sgs
         public static Color[] header = {new Color(1, 0.65f, 0), new Color(0.84f, 0.39f, 0)};
 
         //grey, dark-purple
-        public static Color[] lockedButton = {new Color(0.38f, 0.38f, 0.38f), new Color(0.67f, 0, 1)};
+        public static Color[] lockedButton = {new Color(0.55f, 0.55f, 0.55f), new Color(0.67f, 0, 1)};
 
         //yellow-green, dark-green
         public static Color[] button = {new Color(0, 0.37f, 0), new Color(0.37f, 1, 0)};
@@ -60,15 +60,10 @@ public static class Sgs
 
         void DestroyCurrentPage()
         {
-            Button[] buttons = GameObject.FindObjectsOfType<Button>();
-            Text[] texts = GameObject.FindObjectsOfType<Text>();
-            foreach (Button button in buttons)
+            MenuItem[] menuItems = GameObject.FindObjectsOfType<MenuItem>();
+            foreach(MenuItem menuItem in menuItems)
             {
-                GameObject.Destroy(button.gameObject);
-            }
-            foreach (Text text in texts)
-            {
-                GameObject.Destroy(text.gameObject);
+                GameObject.Destroy(menuItem.gameObject);
             }
         }
         GameObject MakeText(float x, float y, string message, Color[] colors)
@@ -81,6 +76,8 @@ public static class Sgs
             if (textCpnt != null)
             {
                 textCpnt.message = message;
+                textCpnt.fill = colors[0];
+                textCpnt.stroke = colors[1];
             }
             return textObj;
         }
@@ -95,6 +92,8 @@ public static class Sgs
                 {
                     Text textCpnt = buttonCpnt.AddComponent<Text>();
                     textCpnt.message = message;
+                    textCpnt.fill = colors[0];
+                    textCpnt.stroke = colors[1];
                     textCpnt.material = gr.pixelBubbleMaterial; //dynamically created cpnts do not inherit serialized fields set in inspector. That's why you have to respecify that here
                 }
                 buttonCpnt.function = function;
@@ -123,6 +122,9 @@ public static class Sgs
         void CreateHomePage()
         {
             IncludeHighScore();
+
+            GameObject.Instantiate(gr.Title, new Vector3(0, 60, 0), Quaternion.identity);
+
             MakeButton(-70, -20, "Tutorial", SgsButtonHandler.Tutorial, TextColors.button);
 
             if(gs.hasUnlockedGameC)

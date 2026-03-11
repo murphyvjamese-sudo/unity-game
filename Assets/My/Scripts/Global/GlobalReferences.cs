@@ -54,6 +54,7 @@ public class GlobalReferences : MonoBehaviour
     public GameObject Text;
     public GameObject Button;
     public GameObject Points;
+    public GameObject Title;
 
     //misc
     public GameObject BountyTarget; //the star that goes over the enemy that is marked as bounty, so you will recieve extra points for defeating it.

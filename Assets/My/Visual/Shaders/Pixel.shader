@@ -8,6 +8,8 @@ Shader "Unlit/Pixel"
         _IsInverted("IsInverted", Float) = 0.0
         _IsFrozen("IsFrozen", Float) = 0.0
         _Transparency("Transparency", Float) = 1.0
+
+        _IsText("IsText", Float) = 0.0
         _Stroke("Stroke", Color) = (1, 1, 1) //png created with white stroke for text
         _Fill("Fill", Color) = (0, 0, 0) //png created with black fill for text
     }
@@ -45,8 +47,10 @@ Shader "Unlit/Pixel"
             float _IsInverted;
             float _IsFrozen;
             float _Transparency;
-            float3 _Stroke;
-            float3 _Fill;
+
+            float _IsText;
+            float4 _Stroke;
+            float4 _Fill;
 
             v2f vert(appdata v)
             {
@@ -60,12 +64,12 @@ Shader "Unlit/Pixel"
             {
                 fixed4 color = tex2D(_MainTex, i.uv);
                 
-                if(color.r > .5)
-                { //if white (stroke)
+                if(_IsText == 1 && color.r > .5)
+                { //if raw text image data is white (stroke), change color to specified
                     color.rgb = float3(_Stroke.r, _Stroke.g, _Stroke.b);
                 }
-                if(color.r < .5)
-                { //if black (fill)
+                else if(_IsText == 1 && color.r < .5)
+                { //if raw text image data is black (fill), change color to specified
                     color.rgb = float3(_Fill.r, _Fill.g, _Fill.b);
                 }
                 if(_IsFrozen && color.a != 0)

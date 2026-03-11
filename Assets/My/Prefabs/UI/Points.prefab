@@ -8,6 +8,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: fill.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: stroke.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3657650933984160713, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
       propertyPath: m_Name
       value: Points
@@ -84,8 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2913a64e796f940e784d66da10ff3b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  freeze: -1
-  poison: -1
+  poisonDuration: 350
+  freezeDuration: 175
+  freezeCounter: -1
+  poisonCounter: -1
   lifespan: 25
 --- !u!114 &-8099422545449301374
 MonoBehaviour:

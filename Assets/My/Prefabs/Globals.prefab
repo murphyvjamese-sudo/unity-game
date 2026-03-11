@@ -175,6 +175,7 @@ MonoBehaviour:
   Text: {fileID: 3657650933984160713, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
   Button: {fileID: 6887461214481119213, guid: d02656cba64e04f068655ad7183bf402, type: 3}
   Points: {fileID: 1769661855659036180, guid: 279534308ae304baeacddd0e0dd8140a, type: 3}
+  Title: {fileID: 1382052672856964676, guid: 1e403de9077134f319e09ca7eab6f924, type: 3}
   BountyTarget: {fileID: 4913123471751601671, guid: e0ad593d9023f4e51b15f9d4ba4bcc7e, type: 3}
   NavigatorX: {fileID: 9111732116987796405, guid: fdee6ea21620040ec98a21f7ad4fa4ba, type: 3}
 --- !u!114 &-5689934363816295250
@@ -189,13 +190,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571d3152ee90a471382ff8938b9adaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPaidPlayer: 0
+  isFirstTimePlayer: 0
+  hasUnlockedGameB: 0
+  hasUnlockedGameC: 0
+  gameMode: 0
   currentScene: 0
   newScene: 0
   currentPage: 6
   desiredPage: 0
   currentScore: 0
-  highScore: 0
+  highScoreA: 0
+  highScoreB: 0
+  highScoreC: 0
   isMenuAcceptingInput: 0
   preventDuplicateShipUpgrades: 0
   playerConfiguration:

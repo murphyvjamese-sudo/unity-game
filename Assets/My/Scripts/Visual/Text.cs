@@ -14,6 +14,8 @@ public class Text : MonoBehaviour
 
     public bool isCameraRelative;  //set to true to ask this text to try and find a camera to sync its position relative to.
     public bool isInvertedColor;  //helpful for black and white games
+    public Color fill;
+    public Color stroke;
     public string message;  //can set in inspector or at runtime
     public DataBind dataBind;  //set in inspector. This is an sgs mapping, so you might update this enum for each new game you make
     public Material material;  //set in inspector
