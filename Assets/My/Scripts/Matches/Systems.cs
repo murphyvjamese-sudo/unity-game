@@ -587,7 +587,8 @@ public class Systems : MonoBehaviour
                     {
                         if (f.GetComponent<Death>() != null && Vector2.Distance(f.transform.position, e.transform.position) > eWorld.deathRadius)
                         {  //also check (essentially every other entity - might need to qualify with something other than the death cpnt) to see if they are too far offscreen, and should thus die.
-                            f.GetComponent<Death>().isDeathFlagged = true;
+                            //old way... I think this causes you to recieve points each time an object goes offscreen, and also causes them to drop an explosion, which can briefly play only part of the explosion noise before getting cut off abruptly:    f.GetComponent<Death>().isDeathFlagged = true;
+                            GameObject.Destroy(f);
                         }
                         if (f.GetComponent<Controller>() != null && !f.GetComponent<Controller>().isNPC)
                         {
