@@ -5,8 +5,6 @@ using System.Drawing;
 using System.Security.Principal;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-using UnityEditor.Rendering;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
