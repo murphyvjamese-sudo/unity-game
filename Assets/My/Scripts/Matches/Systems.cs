@@ -1118,10 +1118,6 @@ public class Systems : MonoBehaviour
 
     private void UserInputSystem(GameObject[] entities)
     {  //find player, detect user input, and update controller cpnt accordingly.
-        bool isTouchscreen()
-        {  //use touch input if true, and keyboard input if false
-            return false;  //can implement this logic later.
-        }
         void HandleKeyboardInput(Controller controller)
         {
             if (Input.GetKey(KeyCode.BackQuote))
@@ -1136,7 +1132,7 @@ public class Systems : MonoBehaviour
         void HandleTouchInput(Controller controller)
         {
             Touch[] touches = Input.touches;
-            int screenMidpoint = GlobalValues.unitsInScreen / 2;
+            int screenMidpoint = Screen.width / 2;
             foreach (Touch touch in touches)
             {
                 if (touch.position.x <= screenMidpoint)
@@ -1168,14 +1164,8 @@ public class Systems : MonoBehaviour
             {  //find the player
                 Controller eController = e.GetComponent<Controller>();
                 Utilities.ResetControllerInputs(eController);
-                if (isTouchscreen())
-                {
-                    HandleTouchInput(eController);
-                }
-                else if (!isTouchscreen())
-                {
-                    HandleKeyboardInput(eController);
-                }
+                HandleTouchInput(eController);
+                HandleKeyboardInput(eController);
             }
             if (e.GetComponent<Button>() != null)
             {
