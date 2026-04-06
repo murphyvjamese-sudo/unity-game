@@ -786,10 +786,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 49ba47cc-c983-4724-8b0d-1817f56273d4
+  cloudProjectId: cb01fc13-a482-44ec-b975-3df1bce5bc5f
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: CCh251228
+  projectName: Cosmic Chase
   organizationId: murphyvjamese_unity
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

@@ -8,6 +8,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Unity.Services.Leaderboards;
+using System.Threading.Tasks;
 
 public class Systems : MonoBehaviour
 {  //This script handles the logic for the actual gameplay, and facilitates the "systems" part of my ECS design, which I will only use for matches. (Menus will be a traditional OOP design). The one exception is animations. This will be handled in separate, traditional unity GOC scripts
@@ -335,7 +337,7 @@ public class Systems : MonoBehaviour
         }
     }
 
-    private void WorldSystem(GameObject[] entities)
+    private async Task WorldSystem(GameObject[] entities)
     {
         void NextLevel(World eWorld)
         {  //time to go to the next level
@@ -528,6 +530,7 @@ public class Systems : MonoBehaviour
                         eWorld.gameOverCounter--;
                         if (eWorld.gameOverCounter == 0)
                         {
+                            string leaderboardId = "gameA";
                             int highScore = 0;
                             if(gs.gameMode == Sgs.GameModes.GameA)
                             {
@@ -551,15 +554,30 @@ public class Systems : MonoBehaviour
                                 if(gs.gameMode == Sgs.GameModes.GameA)
                                 {
                                     gs.highScoreA = gs.currentScore;
+                                    leaderboardId = "gameA";
                                 }
                                 else if(gs.gameMode == Sgs.GameModes.GameB)
                                 {
                                     gs.highScoreB = gs.currentScore;
+                                    leaderboardId = "gameB";
                                 }
                                 else if(gs.gameMode == Sgs.GameModes.GameC)
                                 {
                                     gs.highScoreC = gs.currentScore;
+                                    leaderboardId = "gameC";
                                 }
+                            }
+                            SecurePlayerPrefs.SetInt(leaderboardId, gs.currentScore);
+                            if(Application.internetReachability != NetworkReachability.NotReachable)
+                            {  //if you have internet
+                                //submit the score to unity leaderboards, but first check if a highscore was achieved offline, and submit that instead if it was
+                                if(SecurePlayerPrefs.GetInt(leaderboardId) > gs.currentScore)
+                                {
+                                    Debug.Log("get offline score");
+                                    gs.currentScore = SecurePlayerPrefs.GetInt(leaderboardId);
+                                }
+                                Debug.Log("set online score");
+                                LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, gs.currentScore);  //don't need to await. Only way this could hurt you is if you visit the leaderboards page within your app before the server finishes recieving this new score, and then it use your old score in determining your rank. Not crucial, and highly unlikely you could even navigate to the new menu that quickly anyways
                             }
                             gs.currentScore = 0;
                             eWorld.camera.transform.position = new Vector3(0, 0, -10);

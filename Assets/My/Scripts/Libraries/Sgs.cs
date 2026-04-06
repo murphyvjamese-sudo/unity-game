@@ -140,7 +140,7 @@ public static class Sgs
             }
             else
             {  //unpaid player. base game
-                if(gs.isFirstTimePlayer)
+                if(PlayerPrefs.GetInt("HasCompletedTutorial") == 0)
                 { //don't allow players to click buttons to play games when they first open the app. They must read the tutorial first
                     MakeText(-70, -40, "Game A", TextColors.lockedButton);
                     MakeText(-70, -60, "Game B", TextColors.lockedButton);
@@ -200,6 +200,7 @@ public static class Sgs
             MakeText(-77, tbsy - 80, "blaster!", TextColors.information);
 
             MakeButton(-30, -60, "Got it!", SgsButtonHandler.PlayGameA, TextColors.button);
+            PlayerPrefs.SetInt("HasCompletedTutorial", 1);
 
         }
         void CreateChooseAndUpgradeShipPages()
