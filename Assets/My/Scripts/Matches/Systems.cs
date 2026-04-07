@@ -530,7 +530,35 @@ public class Systems : MonoBehaviour
                         eWorld.gameOverCounter--;
                         if (eWorld.gameOverCounter == 0)
                         {
-                            string leaderboardId = "gameA";
+                            
+
+
+
+
+                            if(gs.gameMode == Sgs.GameModes.GameA)
+                            {
+                                await Leaderboards.SyncLeaderboards(gs, "gameA", gs.currentScore);
+                            }
+                            else if(gs.gameMode == Sgs.GameModes.GameB)
+                            {
+                                await Leaderboards.SyncLeaderboards(gs, "gameB", gs.currentScore);
+                            }
+                            else if(gs.gameMode == Sgs.GameModes.GameC)
+                            {
+                                await Leaderboards.SyncLeaderboards(gs, "gameC", gs.currentScore);
+                            }
+                            SceneManager.LoadScene("Menu");  //scene loads at end of frame
+                            //set current and desired pages, so that when scene loads on next frame, and Systems.MiscSystem() detects that currentPage == None, it will load the desired page.
+                            gs.desiredPage = Sgs.Pages.GameOver;
+                            gs.currentPage = Sgs.Pages.None;
+                            gs.currentScore = 0;
+                            eWorld.camera.transform.position = new Vector3(0, 0, -10);
+
+
+
+
+
+                            /*string leaderboardId = "gameA";
                             int highScore = 0;
                             if(gs.gameMode == Sgs.GameModes.GameA)
                             {
@@ -580,7 +608,7 @@ public class Systems : MonoBehaviour
                                 LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, gs.currentScore);  //don't need to await. Only way this could hurt you is if you visit the leaderboards page within your app before the server finishes recieving this new score, and then it use your old score in determining your rank. Not crucial, and highly unlikely you could even navigate to the new menu that quickly anyways
                             }
                             gs.currentScore = 0;
-                            eWorld.camera.transform.position = new Vector3(0, 0, -10);
+                            eWorld.camera.transform.position = new Vector3(0, 0, -10);*/
                         }
                     }
                     if (eWorld.levelCounter > 0)

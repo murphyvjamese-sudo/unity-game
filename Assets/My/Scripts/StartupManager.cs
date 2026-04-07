@@ -13,64 +13,15 @@ public class StartupManager : MonoBehaviour
     int splashScreenDuration;
     int splashScreenCounter;
 
-    async Task ConnectToLeaderboards()
-    {
-        await UnityServices.InitializeAsync();
-        try
-        {
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            }
-            Debug.Log("Signed in as: " + AuthenticationService.Instance.PlayerId);
-        }
-        catch
-        {
-            Debug.Log("no internet");
-        }
-    }
-
-    async Task FetchHighScores(GlobalState gs)
-    { //uncomment code related to game c once ready for that update to your app
-        LeaderboardEntry leA = await LeaderboardsService.Instance.GetPlayerScoreAsync("gameA");
-        LeaderboardEntry leB = await LeaderboardsService.Instance.GetPlayerScoreAsync("gameB");
-        //LeaderboardEntry leC = await LeaderboardsService.Instance.GetPlayerScoreAsync("gameC");
-        if(leA != null)
-        {
-            gs.highScoreA = (int)leA.Score;
-        }
-        if(leB != null)
-        {
-            gs.highScoreB = (int)leB.Score;
-        }
-        /*if(leC != null)
-        {
-            gs.highScoreC = (int)leC.Score;
-        }*/
-    }
-    
-    async void Awake()
-    {
-        await ConnectToLeaderboards();
-        splashScreenDuration = 50;
-        splashScreenCounter = splashScreenDuration;
-    }
-
-    async Task Start()
+    async void Start()
     {
         GlobalState gs = FindObjectOfType<GlobalState>();
 
-        if(Application.internetReachability == NetworkReachability.NotReachable && gs != null)
-        { //load offline scores if not connected to internet
-            gs.highScoreA = SecurePlayerPrefs.GetInt("gameA");
-            gs.highScoreB = SecurePlayerPrefs.GetInt("gameB");
-            //gs.highScoreC = SecurePlayerPrefs.GetInt("gameC");  //uncomment once you are ready for the game c update
-        }
-        else if(Application.internetReachability != NetworkReachability.NotReachable)
-        { //load online highscore if connected to internet.
-            Debug.Log("fetched high scores");
-            await FetchHighScores(gs);
-        }
+        splashScreenDuration = 50;
+        splashScreenCounter = splashScreenDuration;
+
+        await Leaderboards.ConnectToLeaderboards();
+        await Leaderboards.SyncLeaderboards(gs);
     }
 
     void FixedUpdate()
