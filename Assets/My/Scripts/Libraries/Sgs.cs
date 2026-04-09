@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -35,7 +36,8 @@ public static class Sgs
         GameOver = 5,
         None = 6,
         AdvertiseGameC = 7,
-        Tutorial = 8
+        Tutorial = 8,
+        Leaderboards = 9
     }
     public enum GameModes
     {
@@ -119,6 +121,10 @@ public static class Sgs
                 //DEPRACATED: highScore.dataBind = Text.DataBind.HighScore;
             }
         }
+        void IncludeReturnHomeButton()
+        { //most menu pages will have a standard button location to return home
+            MakeButton(20, -90, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
+        }
         void CreateHomePage()
         {
             IncludeHighScore();
@@ -151,6 +157,7 @@ public static class Sgs
                     MakeButton(-70, -60, "Game B", SgsButtonHandler.UnlockGameB, TextColors.lockedButton);
                 }
             }
+            MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
         }
         void CreateAdvertiseGameBPage()
         {
@@ -203,37 +210,45 @@ public static class Sgs
             PlayerPrefs.SetInt("HasCompletedTutorial", 1);
 
         }
+        async Task CreateLeaderboardsPage()
+        {
+            IncludeReturnHomeButton(); //IMPORTANT!: Keep this posted above the GetLeaderboardUIData() call. If there is no leaderboard yet, you will be calling with await and be staring at a black screen until someone else finally adds an entry. Want theoretical first time user to be able to escape this if no data has been populated yet.
+            MakeText(-35, 90, "LEADERBOARDS:", TextColors.header);
+            if(Application.internetReachability != NetworkReachability.NotReachable)
+            { //if you are connected to internet, attempt to generate the leaderboards.
+                //Note, if you display rank / totalPlayersOnLeaderboard on the screen, you could fit about 12-13 digits on the screen, which equates to hundreds of billions, if not nine trillion total people on the leaderboard. Way more than you'd ever need, so no need to worry about dynamically generated numbers running offscreen.
+                LeaderboardUIData luid = await Leaderboards.GetLeaderboardUIData();
+
+                //show Game A stats
+                MakeText(-90, 50, "Game A:" + luid.scoreA, TextColors.information);
+                MakeText(-90, 40, "Top " + Mathf.RoundToInt(luid.percentileA * 100) + "%", TextColors.information);
+                MakeText(-90, 30, "" + luid.rankA + "/" + luid.totalPlayersA, TextColors.information);
+
+                //show Game B stats
+                if(gs.hasUnlockedGameB)
+                {
+                    MakeText(-90, 10, "Game B:" + luid.scoreB, TextColors.information);
+                    MakeText(-90, 0, "Top " + Mathf.RoundToInt(luid.percentileB * 100) + "%", TextColors.information);
+                    MakeText(-90, -10, "" + luid.rankB + "/" + luid.totalPlayersB, TextColors.information);
+                }
+                
+                //show Game C stats
+                /*UNCOMMENT when ready for game c app update:
+                if(gs.hasUnlockedGameC)
+                {
+                    MakeText(-30, 50, "Game C:" + luid.scoreC, TextColors.information);
+                    MakeText(-90, -40, "Top " + Mathf.RoundToInt(luid.percentileC * 100) + "%", TextColors.information);
+                    MakeText(-90, -50, "" + luid.rankC + "/" + luid.totalPlayersC, TextColors.information);
+                }
+                */
+            }
+            else
+            {
+                MakeText(-90, 50, "Connect to Internet", TextColors.information);
+            }
+        }
         void CreateChooseAndUpgradeShipPages()
         {
-            /*DEPRACATED: How I implemented before I redesigned menu interface to account for both a game b and game c
-            SgsButtonHandler param0 = SgsButtonHandler.UnlockGameB;
-            SgsButtonHandler param1 = SgsButtonHandler.UnlockGameB;
-            IncludeHighScore();
-            MakeButton(-70, -40, "Speed", SgsButtonHandler.Speed);
-            MakeButton(20, -40, "Turning", SgsButtonHandler.Turning);
-            if (gs.isPaidPlayer)
-            {
-                param0 = SgsButtonHandler.Attack;
-                param1 = SgsButtonHandler.Armor;
-            }
-            MakeButton(-70, -60, "Attack", param0, !gs.isPaidPlayer);
-            MakeButton(20, -60, "Armor", param1, !gs.isPaidPlayer);
-            if (gs.playerConfiguration.upgrades[0] == GlobalState.PlayerConfiguration.ShipUpgrade.None)
-            {
-                MakeText(-50, 70, "Choose Your Ship!");
-            }
-            else if (gs.playerConfiguration.upgrades[0] != GlobalState.PlayerConfiguration.ShipUpgrade.None)
-            { //if this is the second time being asked to upgrade your ship (paid players)
-                MakeText(-50, 70, "Upgrade Your Ship!");
-                Button[] buttons = GameObject.FindObjectsOfType<Button>();
-                foreach (Button button in buttons)
-                {
-                    if (button.function == gs.preventDuplicateShipUpgrades)
-                    {
-                        GameObject.Destroy(button.gameObject);
-                    }
-                }
-            }*/
             IncludeHighScore();
             if(gs.gameMode == GameModes.GameA)
             {  //base options for game a
@@ -274,6 +289,7 @@ public static class Sgs
                     }
                 }
             }
+            IncludeReturnHomeButton();
         }
         void CreateAmmoPage()
         {
@@ -321,6 +337,7 @@ public static class Sgs
             {   //add more options for game c
                 //implement later
             }
+            IncludeReturnHomeButton();
         }
         void CreateCopilotPage()
         {
@@ -344,6 +361,7 @@ public static class Sgs
             {   //add more options for game c
                 //implement later
             }
+            IncludeReturnHomeButton();
         }
         void CreateGameOverPage()
         {
@@ -352,7 +370,7 @@ public static class Sgs
             MakeButton(-90, -60, "Play Again", SgsButtonHandler.PlayAgain, TextColors.button);
             MakeButton(20, -60, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
         }
-        void CreateNewPage(Pages page)
+        async Task CreateNewPage(Pages page)
         {
             switch (page)
             {
@@ -361,6 +379,9 @@ public static class Sgs
                     break;
                 case Pages.Tutorial:
                     CreateTutorialPage();
+                    break;
+                case Pages.Leaderboards:
+                    await CreateLeaderboardsPage();
                     break;
                 case Pages.AdvertiseGameB:
                     CreateAdvertiseGameBPage();
@@ -466,6 +487,9 @@ public static class Sgs
 
         switch (sgs)
         {
+            case SgsButtonHandler.Leaderboards:
+                NewMenuPage(Pages.Leaderboards);
+                break;
             case SgsButtonHandler.Tutorial:
                 NewMenuPage(Pages.Tutorial);
                 break;
@@ -551,6 +575,7 @@ public static class Sgs
     }
     public enum SgsButtonHandler
     {  //I will try to organize each button into groupings of the same menus via indentation of this enum body
+        Leaderboards = 24,
         Tutorial = 21,
         PlayGameA = 0,  //from main menu
         PlayGameB = 20,

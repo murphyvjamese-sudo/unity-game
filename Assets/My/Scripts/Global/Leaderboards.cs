@@ -4,10 +4,22 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Leaderboards.Models;
 using System.Threading.Tasks;
-using UnityEngine.TestTools;
-using System.Runtime.CompilerServices;
-using System;
 
+public class LeaderboardUIData
+{
+    public double scoreA;
+    public long rankA;
+    public long totalPlayersA;
+    public float percentileA;
+    public double scoreB;
+    public long rankB;
+    public long totalPlayersB;
+    public float percentileB;
+    public double scoreC;
+    public long rankC;
+    public long totalPlayersC;
+    public float percentileC;
+}
 public static class Leaderboards
 {  //handles how to connect to PlayerPrefs via SecurePlayerPrefs for offline high scores, as well as online high scores via Unity Dashboard
     public static async Task ConnectToLeaderboards()
@@ -126,5 +138,88 @@ public static class Leaderboards
             await SetLeaderboard(gs, "gameC", await GetLeaderboard("gameC"));
             break;
         }
+    }
+
+    public static async Task<LeaderboardUIData> GetLeaderboardUIData()
+    {
+        //helper methods
+        async Task<double> GetScore(string leaderboardId)
+        {
+            try
+            {
+                LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardId);
+                return leaderboardEntry.Score;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        async Task<long> GetRank(string leaderboardId)
+        {
+            try
+            {
+                LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardId);
+                return leaderboardEntry.Rank + 1;  //almost positive these are 0-indexed
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        async Task<long> GetTotalPlayers(string leaderboardId)
+        {
+            try
+            {
+                var scoresResponse = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId, new GetScoresOptions { Limit = 1 });
+                return scoresResponse.Total;
+            }
+            catch 
+            { //catches any error, most likely ones might be that the leaderboard got misconfigured, doesn't exist, or potentially thrown if no entries exist yet
+                return 0;
+            }
+        }
+
+        LeaderboardUIData luid = new LeaderboardUIData();
+
+        luid.scoreA = await GetScore("gameA");
+        luid.rankA = await GetRank("gameA");
+        luid.totalPlayersA = await GetTotalPlayers("gameA");
+        if(luid.totalPlayersA > 0)
+        { //avoid divide by zero
+            luid.percentileA = luid.rankA / luid.totalPlayersA;
+        }
+
+        luid.scoreB = await GetScore("gameB");
+        luid.rankB = await GetRank("gameB");
+        luid.totalPlayersB = await GetTotalPlayers("gameB");
+        if(luid.totalPlayersB > 0)
+        {
+            luid.percentileB = luid.rankB / luid.totalPlayersB;
+        }
+
+        /*UNCOMMENT once ready for game c app update
+        luid.scoreC = await GetScore("gameC");
+        luid.rankC = await GetRank("gameC");
+        luid.totalPlayersC = await GetTotalPlayers("gameC");
+        if(luid.totalPlayersC > 0)
+        {
+            luid.percentileC = luid.rankC / luid.totalPlayersC;
+        }*/
+
+        return luid;
+
+        /*DEPRACATED if I can have 2 outermost classes in one file//raw leaderboard data
+        long rankA = await GetRank("gameA");
+        long totalPlayersA = await GetTotalPlayers("gameA");
+        long rankB = await GetRank("gameB");
+        long totalPlayersB = await GetTotalPlayers("gameB");
+        long rankC = await GetRank("gameC");
+        long totalPlayersC = await GetTotalPlayers("gameC");
+
+        //derived leaderboard data
+        float percentageA = rankA / totalPlayersA;
+        float percentageB = rankB / totalPlayersB;
+        float percentageC = rankC / totalPlayersC;*/ 
     }
 }

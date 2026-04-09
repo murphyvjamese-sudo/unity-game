@@ -1309,6 +1309,11 @@ public class Systems : MonoBehaviour
         {  //takes a char from message field, and maps it to the corresponding sprite
             foreach (Sprite sprite in text.letters)
             {
+                if(letter == '/' && sprite.name == "slash")
+                { //fixes a bug where you aren't allowed to name your sprite for the forward slash character "/" in the sprite editor
+                    Debug.Log("gotcha");
+                    return sprite;
+                }
                 if (sprite.name[0] == letter)
                 {
                     return sprite;

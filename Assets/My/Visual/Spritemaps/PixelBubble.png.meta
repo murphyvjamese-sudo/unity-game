@@ -1808,7 +1808,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PixelBubble_0
+      name: slash
       rect:
         serializedVersion: 2
         x: 26
@@ -2264,7 +2264,6 @@ TextureImporter:
       N: -1054690711
       O: 908828071
       P: 1827846843
-      PixelBubble_0: 294188769
       Q: -227871680
       R: -1131363182
       S: 1411719682
@@ -2300,6 +2299,7 @@ TextureImporter:
       q: 507187252
       r: -1897089514
       s: -1438538091
+      slash: 294188769
       t: 839500895
       u: -231118497
       v: 1285646293
