@@ -15,13 +15,13 @@ public static class Sgs
         public static Color[] information = {new Color(0.69f, 0, 1), new Color(0, 0, 0)};
 
         //yellow-orange, dark red-orange
-        public static Color[] header = {new Color(1, 0.65f, 0), new Color(0.84f, 0.39f, 0)};
+        public static Color[] header = {new Color(1, 0.65f, 0), new Color(0.63f, 0.29f, 0)};
 
         //grey, dark-purple
-        public static Color[] lockedButton = {new Color(0.55f, 0.55f, 0.55f), new Color(0.67f, 0, 1)};
+        public static Color[] lockedButton = {new Color(0.65f, 0.65f, 0.65f), new Color(0.5f, 0, .75f)};
 
         //yellow-green, dark-green
-        public static Color[] button = {new Color(0, 0.37f, 0), new Color(0.37f, 1, 0)};
+        public static Color[] button = {new Color(0, 0.25f, 0), new Color(0.5f, 1, 0)};
 
         //white, black (points are highscores and what appears over an enemy you destroy or a powerup you collect)
         public static Color[] points = {new Color(1, 1, 1), new Color(0, 0, 0)};
@@ -220,25 +220,46 @@ public static class Sgs
                 LeaderboardUIData luid = await Leaderboards.GetLeaderboardUIData();
 
                 //show Game A stats
-                MakeText(-90, 50, "Game A:" + luid.scoreA, TextColors.information);
-                MakeText(-90, 40, "Top " + Mathf.RoundToInt(luid.percentileA * 100) + "%", TextColors.information);
-                MakeText(-90, 30, "" + luid.rankA + "/" + luid.totalPlayersA, TextColors.information);
+                if(luid.scoreA > 0)
+                {
+                    MakeText(-90, 50, "Game A:" + luid.scoreA, TextColors.information);
+                    MakeText(-90, 40, "Top " + Mathf.RoundToInt(luid.percentileA * 100) + "%", TextColors.information);
+                    MakeText(-90, 30, "" + luid.rankA + "/" + luid.totalPlayersA, TextColors.information);
+                }
+                else
+                {
+                    MakeText(-90, 50, "Game A: No submissions yet!", TextColors.information);
+                }
 
                 //show Game B stats
                 if(gs.hasUnlockedGameB)
                 {
-                    MakeText(-90, 10, "Game B:" + luid.scoreB, TextColors.information);
-                    MakeText(-90, 0, "Top " + Mathf.RoundToInt(luid.percentileB * 100) + "%", TextColors.information);
-                    MakeText(-90, -10, "" + luid.rankB + "/" + luid.totalPlayersB, TextColors.information);
+                    if(luid.scoreB > 0)
+                    { //you have an entry in the leaderboards
+                        MakeText(-90, 10, "Game B:" + luid.scoreB, TextColors.information);
+                        MakeText(-90, 0, "Top " + Mathf.RoundToInt(luid.percentileB * 100) + "%", TextColors.information);
+                        MakeText(-90, -10, "" + luid.rankB + "/" + luid.totalPlayersB, TextColors.information);
+                    }
+                    else
+                    { //you have yet to submit an entry to the leaderboards
+                        MakeText(-90, 10, "Game B: No submissions yet!", TextColors.information);
+                    }
                 }
                 
                 //show Game C stats
                 /*UNCOMMENT when ready for game c app update:
                 if(gs.hasUnlockedGameC)
                 {
-                    MakeText(-30, 50, "Game C:" + luid.scoreC, TextColors.information);
-                    MakeText(-90, -40, "Top " + Mathf.RoundToInt(luid.percentileC * 100) + "%", TextColors.information);
-                    MakeText(-90, -50, "" + luid.rankC + "/" + luid.totalPlayersC, TextColors.information);
+                    if(luid.scoreC > 0)
+                    { //you have an entry in the leaderboards
+                        MakeText(-90, 10, "Game C:" + luid.scoreC, TextColors.information);
+                        MakeText(-90, 0, "Top " + Mathf.RoundToInt(luid.percentileC * 100) + "%", TextColors.information);
+                        MakeText(-90, -10, "" + luid.rankC + "/" + luid.totalPlayersC, TextColors.information);
+                    }
+                    else
+                    { //you have yet to submit an entry to the leaderboards
+                        MakeText(-90, 10, "Game C: No submissions yet!", TextColors.information);
+                    }
                 }
                 */
             }

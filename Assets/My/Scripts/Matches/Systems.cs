@@ -37,6 +37,7 @@ public class Systems : MonoBehaviour
             DeathSystem(entities);
             WorldSystem(entities);
             AnimationSystem(entities);
+            AudioSystem(entities);
             CopilotSystem(entities);
             MiscSystem(entities);
         }
@@ -268,7 +269,7 @@ public class Systems : MonoBehaviour
                     Vector2 treasure = treasureGameObject.transform.position;
                     Vector2 hunter = player.transform.position;
                     Vector2 xMark = e.transform.position;
-                    float screenExtent = GlobalValues.unitsInScreen / 2;
+                    float screenExtent = GlobalValues.unitsInScreen / 2 - 10;
                     float xDist = 0;  //this tells how far the xMark is from the player. Since the player is always at the exact center of the screen, anytime the xMark is a screen's width away from the player, it will get clamped.
                     float yDist = 0;
                     xMark = treasure;
@@ -530,11 +531,6 @@ public class Systems : MonoBehaviour
                         eWorld.gameOverCounter--;
                         if (eWorld.gameOverCounter == 0)
                         {
-                            
-
-
-
-
                             if(gs.gameMode == Sgs.GameModes.GameA)
                             {
                                 await Leaderboards.SyncLeaderboards(gs, "gameA", gs.currentScore);
@@ -553,62 +549,6 @@ public class Systems : MonoBehaviour
                             gs.currentPage = Sgs.Pages.None;
                             gs.currentScore = 0;
                             eWorld.camera.transform.position = new Vector3(0, 0, -10);
-
-
-
-
-
-                            /*string leaderboardId = "gameA";
-                            int highScore = 0;
-                            if(gs.gameMode == Sgs.GameModes.GameA)
-                            {
-                                highScore = gs.highScoreA;
-                            }
-                            else if(gs.gameMode == Sgs.GameModes.GameB)
-                            {
-                                highScore = gs.highScoreB;
-                            }
-                            else if(gs.gameMode == Sgs.GameModes.GameC)
-                            {
-                                highScore = gs.highScoreC;
-                            }
-                            SceneManager.LoadScene("Menu");  //scene loads at end of frame
-                                                             //set current and desired pages, so that when scene loads on next frame, and Systems.MiscSystem() detects that currentPage == None, it will load the desired page.
-                            gs.desiredPage = Sgs.Pages.GameOver;
-                            gs.currentPage = Sgs.Pages.None;
-                            if (gs.currentScore > highScore)
-                            {
-                                //DEPRACATED: gs.highScore = gs.currentScore;
-                                if(gs.gameMode == Sgs.GameModes.GameA)
-                                {
-                                    gs.highScoreA = gs.currentScore;
-                                    leaderboardId = "gameA";
-                                }
-                                else if(gs.gameMode == Sgs.GameModes.GameB)
-                                {
-                                    gs.highScoreB = gs.currentScore;
-                                    leaderboardId = "gameB";
-                                }
-                                else if(gs.gameMode == Sgs.GameModes.GameC)
-                                {
-                                    gs.highScoreC = gs.currentScore;
-                                    leaderboardId = "gameC";
-                                }
-                            }
-                            SecurePlayerPrefs.SetInt(leaderboardId, gs.currentScore);
-                            if(Application.internetReachability != NetworkReachability.NotReachable)
-                            {  //if you have internet
-                                //submit the score to unity leaderboards, but first check if a highscore was achieved offline, and submit that instead if it was
-                                if(SecurePlayerPrefs.GetInt(leaderboardId) > gs.currentScore)
-                                {
-                                    Debug.Log("get offline score");
-                                    gs.currentScore = SecurePlayerPrefs.GetInt(leaderboardId);
-                                }
-                                Debug.Log("set online score");
-                                LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, gs.currentScore);  //don't need to await. Only way this could hurt you is if you visit the leaderboards page within your app before the server finishes recieving this new score, and then it use your old score in determining your rank. Not crucial, and highly unlikely you could even navigate to the new menu that quickly anyways
-                            }
-                            gs.currentScore = 0;
-                            eWorld.camera.transform.position = new Vector3(0, 0, -10);*/
                         }
                     }
                     if (eWorld.levelCounter > 0)
@@ -846,8 +786,12 @@ public class Systems : MonoBehaviour
                         if (e.GetComponent<Identification>() != null)
                         { //this block is meant to ensure that pulses can only deliver collisions for one frame. Since I don't have a good cooldown mechanism, (and don't want to implement one) this allows me to preserve the visual of the AOE surviving for a few frames without quickly converting and unconverting targets, resulting in a scenario where you could hit an enemy with a convertive pulse and it will end up remaining on its original team.
                             Identification eIdentification = e.GetComponent<Identification>();
-                            if (eIdentification.name == Identification.Name.ConvertivePulse || eIdentification.name == Identification.Name.FreezePulse)
+                            if (eIdentification.name == Identification.Name.ConvertivePulse || eIdentification.name == Identification.Name.FreezePulse || eIdentification.name == Identification.Name.Explosion)
                             {
+                                if(eIdentification.name == Identification.Name.Explosion)
+                                {
+                                    Debug.Log("gotcha explosion");
+                                }
                                 Destroy(e.GetComponent<Collisions>());
                             }
                         }
@@ -1303,6 +1247,17 @@ public class Systems : MonoBehaviour
         }
     }
 
+    private void AudioSystem(GameObject[] entities)
+    { //some audio is played when an already defined game object is first instantiated, in which case it will just be given an AudioSource cpnt and be told to play on awake. However, sometimes sounds need to be played in response to specific events, which do not create new objects to trigger the sound. (Examples: collecting a coin, clicking a button.) In these "event-driven" scenarios, You will create an instance of a "Noise" prefab to play the sound until some other event stops it from playing. Once this system detects that a Noise object is not playing anything, it will delete that object to free up memory / performance.
+        foreach(GameObject e in entities)
+        {
+            if(e.GetComponent<Noise>() != null && e.GetComponent<AudioSource>() != null && !e.GetComponent<AudioSource>().isPlaying)
+            { //destroy any Noise object that is not playing its sound.
+                Destroy(e);
+            }
+        }
+    }
+
     private void TextSystem(GameObject[] entities)
     {
         Sprite FindChar(Text text, char letter)
@@ -1311,7 +1266,6 @@ public class Systems : MonoBehaviour
             {
                 if(letter == '/' && sprite.name == "slash")
                 { //fixes a bug where you aren't allowed to name your sprite for the forward slash character "/" in the sprite editor
-                    Debug.Log("gotcha");
                     return sprite;
                 }
                 if (sprite.name[0] == letter)

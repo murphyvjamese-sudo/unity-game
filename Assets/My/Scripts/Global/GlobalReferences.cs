@@ -46,7 +46,7 @@ public class GlobalReferences : MonoBehaviour
     public RuntimeAnimatorController playerSpeedy;
     public RuntimeAnimatorController playerTurnable;
     public RuntimeAnimatorController playerArmored;
-    public RuntimeAnimatorController playerAttacking;
+    public RuntimeAnimatorController playerAttacking;    
 
     //text, buttons, and menus
     public Sprite[] typography;  //defines the sprite for each letter in PixelBubble.png, to be used by Text.cs

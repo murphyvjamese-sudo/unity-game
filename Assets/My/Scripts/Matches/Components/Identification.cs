@@ -28,7 +28,7 @@ public class Identification : MonoBehaviour
         ForceField = 16,
         PoisonAura = 17,
         NavigatorX = 18,
-        BountyTarget = 19
+        BountyTarget = 19,
     }
     public enum Value
     {

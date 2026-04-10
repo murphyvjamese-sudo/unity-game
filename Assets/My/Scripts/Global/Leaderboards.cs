@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 public class LeaderboardUIData
 {
     public double scoreA;
-    public long rankA;
-    public long totalPlayersA;
+    public int rankA;
+    public int totalPlayersA;
     public float percentileA;
     public double scoreB;
-    public long rankB;
-    public long totalPlayersB;
+    public int rankB;
+    public int totalPlayersB;
     public float percentileB;
     public double scoreC;
-    public long rankC;
-    public long totalPlayersC;
+    public int rankC;
+    public int totalPlayersC;
     public float percentileC;
 }
 public static class Leaderboards
@@ -31,11 +31,11 @@ public static class Leaderboards
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
-            Debug.Log("Signed in as: " + AuthenticationService.Instance.PlayerId);
+            //D\ebug.Log("Signed in as: " + AuthenticationService.Instance.PlayerId);
         }
         catch
         {
-            Debug.Log("no internet");
+            //D\ebug.Log("no internet");
         }
     }
 
@@ -155,7 +155,7 @@ public static class Leaderboards
                 return 0;
             }
         }
-        async Task<long> GetRank(string leaderboardId)
+        async Task<int> GetRank(string leaderboardId)
         {
             try
             {
@@ -167,7 +167,7 @@ public static class Leaderboards
                 return 0;
             }
         }
-        async Task<long> GetTotalPlayers(string leaderboardId)
+        async Task<int> GetTotalPlayers(string leaderboardId)
         {
             try
             {
@@ -187,15 +187,15 @@ public static class Leaderboards
         luid.totalPlayersA = await GetTotalPlayers("gameA");
         if(luid.totalPlayersA > 0)
         { //avoid divide by zero
-            luid.percentileA = luid.rankA / luid.totalPlayersA;
+            luid.percentileA = (float)luid.rankA / (float)luid.totalPlayersA;
         }
 
         luid.scoreB = await GetScore("gameB");
         luid.rankB = await GetRank("gameB");
         luid.totalPlayersB = await GetTotalPlayers("gameB");
         if(luid.totalPlayersB > 0)
-        {
-            luid.percentileB = luid.rankB / luid.totalPlayersB;
+        { //avoid divide by zero
+            luid.percentileB = (float)luid.rankB / (float)luid.totalPlayersB;
         }
 
         /*UNCOMMENT once ready for game c app update
@@ -203,23 +203,10 @@ public static class Leaderboards
         luid.rankC = await GetRank("gameC");
         luid.totalPlayersC = await GetTotalPlayers("gameC");
         if(luid.totalPlayersC > 0)
-        {
-            luid.percentileC = luid.rankC / luid.totalPlayersC;
+        { //avoid divide by zero
+            luid.percentileC = (float)luid.rankC / (float)luid.totalPlayersC;
         }*/
 
         return luid;
-
-        /*DEPRACATED if I can have 2 outermost classes in one file//raw leaderboard data
-        long rankA = await GetRank("gameA");
-        long totalPlayersA = await GetTotalPlayers("gameA");
-        long rankB = await GetRank("gameB");
-        long totalPlayersB = await GetTotalPlayers("gameB");
-        long rankC = await GetRank("gameC");
-        long totalPlayersC = await GetTotalPlayers("gameC");
-
-        //derived leaderboard data
-        float percentageA = rankA / totalPlayersA;
-        float percentageB = rankB / totalPlayersB;
-        float percentageC = rankC / totalPlayersC;*/ 
     }
 }
