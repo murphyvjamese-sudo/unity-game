@@ -37,6 +37,14 @@ public class GlobalReferences : MonoBehaviour
     public GameObject PrincessIcon;
     public GameObject BountyHunterIcon;
 
+    //audio
+    public GameObject JetPowerupNoise;
+    public GameObject CoinCollectNoise;
+    public GameObject ButtonClickNoise;
+    public GameObject ConvertivePulseNoise;
+    public GameObject FreezePulseNoise;
+    public GameObject ThemeSong;
+
     //sprites (for animations that choose a sprite based on conditions, as opposed to working from an animator controller)
     public Sprite targetReady;
     public Sprite targetLoading;

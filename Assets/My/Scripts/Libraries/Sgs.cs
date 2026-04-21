@@ -127,7 +127,25 @@ public static class Sgs
         }
         void CreateHomePage()
         {
+            bool IsPlayingThemeAlready()
+            {
+                Noise[] noises = Utilities.Searches.FindByComponent<Noise>();
+                foreach(Noise noise in noises)
+                {
+                    if(noise.songName == Noise.SongName.Theme)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             IncludeHighScore();
+
+            if(!IsPlayingThemeAlready())
+            { //start playing the theme song any time you go to the home screen and it is not already playing. Stop playing the theme song whenever you enter a match. Result is that theme song should play in every menu screen except the game over page
+                GameObject.Instantiate(gr.ThemeSong);
+            }
 
             GameObject.Instantiate(gr.Title, new Vector3(0, 60, 0), Quaternion.identity);
 
@@ -314,25 +332,6 @@ public static class Sgs
         }
         void CreateAmmoPage()
         {
-            /*DEPRACATED: From old menu system (see CreateChooseAndUpgradeShipPages())
-            SgsButtonHandler param0, param1, param2;
-            param0 = SgsButtonHandler.UnlockGameB;
-            param1 = SgsButtonHandler.UnlockGameB;
-            param2 = SgsButtonHandler.UnlockGameB;
-            IncludeHighScore();
-            MakeText(-70, 70, "Choose Your Blaster!");
-            MakeButton(-70, -40, "Bullets", SgsButtonHandler.Bullets);
-            MakeButton(20, -40, "Cannon", SgsButtonHandler.Cannon);
-            if (gs.isPaidPlayer)
-            {
-                param0 = SgsButtonHandler.Freeze;
-                param1 = SgsButtonHandler.Poison;
-                param2 = SgsButtonHandler.Conversion;
-            }
-            MakeButton(-70, -60, "Freeze", param0, !gs.isPaidPlayer);
-            MakeButton(20, -60, "Poison", param1, !gs.isPaidPlayer);
-            MakeButton(-40, -80, "Conversion", param2, !gs.isPaidPlayer);*/
-
             IncludeHighScore();
             MakeText(-70, 70, "Choose Your Blaster!", TextColors.header);
             if(gs.gameMode == GameModes.GameA)
@@ -593,6 +592,9 @@ public static class Sgs
                 HandleLockedButton();
                 break;
         }
+
+        //finally, also make a noise every time a button is clicked. (Systems.AudioSystem()) will handle deleting this game object at the appropriate time.
+        GameObject.Instantiate(gr.ButtonClickNoise);
     }
     public enum SgsButtonHandler
     {  //I will try to organize each button into groupings of the same menus via indentation of this enum body

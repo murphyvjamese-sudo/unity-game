@@ -764,6 +764,7 @@ public class Systems : MonoBehaviour
                                     else if (ePowerupsIcon.name == PowerupsIcon.Name.Coin)
                                     {
                                         Utilities.Heal(f);
+                                        Instantiate(gr.CoinCollectNoise);
                                     }
                                     if (f.GetComponent<Identification>() != null && f.GetComponent<Identification>().name == Identification.Name.Player)
                                     { //if powerup collided with a player, print points. If it collides with an enemy, no points will be printed.
@@ -788,10 +789,6 @@ public class Systems : MonoBehaviour
                             Identification eIdentification = e.GetComponent<Identification>();
                             if (eIdentification.name == Identification.Name.ConvertivePulse || eIdentification.name == Identification.Name.FreezePulse || eIdentification.name == Identification.Name.Explosion)
                             {
-                                if(eIdentification.name == Identification.Name.Explosion)
-                                {
-                                    Debug.Log("gotcha explosion");
-                                }
                                 Destroy(e.GetComponent<Collisions>());
                             }
                         }
@@ -938,12 +935,17 @@ public class Systems : MonoBehaviour
             if (e.GetComponent<PowerupsApplied>() != null)
             {
                 PowerupsApplied ePowerupsApplied = e.GetComponent<PowerupsApplied>();
-                if (ePowerupsApplied.jetPowerupCounter >= 0)
+                if (ePowerupsApplied.jetPowerupCounter > 0)
                 {
-                    JetTrailVisual eJetTrailVisual = GetComponent<JetTrailVisual>();
+                    JetTrailVisual eJetTrailVisual = e.GetComponent<JetTrailVisual>();
                     if (eJetTrailVisual == null)
                     { //add a component that will create the visual of a jet trail when you are going fast.
                         eJetTrailVisual = e.AddComponent<JetTrailVisual>();
+
+                        //also, create a special sound effect for when you are powered up and jetting around. Attach it to the game object that actually got the jet powerup so it is easier to find and stop this noise at the correct event that the jet powerup ends, such that AudioSystem() can clean up the garbage after.
+                        GameObject noise = Instantiate(gr.JetPowerupNoise);
+                        Debug.Log("instantiate jet noise");
+                        noise.transform.parent = e.transform;
                     }
                     if (ePowerupsApplied.jetPowerupCounter % eJetTrailVisual.moduloInterval == 0)
                     { //every so often, leave behind a jetcloud that will make your ship look like it is moving quickly.
@@ -952,8 +954,13 @@ public class Systems : MonoBehaviour
                     ePowerupsApplied.jetPowerupCounter--;
                 }
                 if (ePowerupsApplied.jetPowerupCounter == 0)
-                { //remove the jet trail visual if you have it applied.
+                { //remove the jet trail visual if you have it applied, as well as the child object carrying the audio sound that a jet - poweruped object makes.
                     Destroy(e.GetComponent<JetTrailVisual>());
+                    Noise noise = e.GetComponentInChildren<Noise>();
+                    if(noise != null)
+                    {
+                        Destroy(noise.gameObject); 
+                    }
                 }
             }
             if (e.GetComponent<JetCloud>() != null)
@@ -1075,6 +1082,17 @@ public class Systems : MonoBehaviour
                     eSA.shotsFired = 1;  //this is the first shot fired
                     eSA.reloadCounter--;
                     Utilities.PerformSpecialAction(e);
+                    if(eSA.spawn.gameObject.GetComponent<Identification>() != null)
+                    {
+                        if(eSA.spawn.gameObject.GetComponent<Identification>().name == Identification.Name.FreezePulse)
+                        {
+                            Instantiate(gr.FreezePulseNoise);
+                        }
+                        else if(eSA.spawn.gameObject.GetComponent<Identification>().name == Identification.Name.ConvertivePulse)
+                        {
+                            Instantiate(gr.ConvertivePulseNoise);
+                        }
+                    }
                 }
                 else if (eSA.reloadCounter == 0)
                 {  //can reload

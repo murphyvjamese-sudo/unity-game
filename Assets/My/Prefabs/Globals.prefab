@@ -69,6 +69,12 @@ MonoBehaviour:
   MechanicIcon: {fileID: 5885793382697005428, guid: 5f91b166caf054baba26c2db93fe89f3, type: 3}
   PrincessIcon: {fileID: 4003301653355018728, guid: e3d198ac01ee24a07952b22bce61c53c, type: 3}
   BountyHunterIcon: {fileID: 2670984420423838942, guid: 582a6fb02442b4e8d9801a9b879eef0f, type: 3}
+  JetPowerupNoise: {fileID: 8907679012400542127, guid: b9c7b5405ddcf406f9b37bcbf9e02fa6, type: 3}
+  CoinCollectNoise: {fileID: 4975053295594820165, guid: b988b8decb7e449e2baf9d150d35cac9, type: 3}
+  ButtonClickNoise: {fileID: 6144365558518932219, guid: 783badf1128da4ab2882ecffe036a07c, type: 3}
+  ConvertivePulseNoise: {fileID: 5736356005350067651, guid: 20bb3c466c7884964ac94b5d054b8d6a, type: 3}
+  FreezePulseNoise: {fileID: 5123596592195318446, guid: bdc67b93f6aab4340a92d18b7ee00f10, type: 3}
+  ThemeSong: {fileID: 8867418765457681759, guid: 182656bce821c4dea8ac6c8c333e7a2c, type: 3}
   targetReady: {fileID: 996035103, guid: bfade7b93ecad4e47aca56401d391ae3, type: 3}
   targetLoading: {fileID: -1808473624, guid: bfade7b93ecad4e47aca56401d391ae3, type: 3}
   shrunkenJetCloud: {fileID: 766741038, guid: bfade7b93ecad4e47aca56401d391ae3, type: 3}
