@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Purchasing;
 using UnityEngine.TextCore.Text;
 
 public static class Sgs
@@ -536,8 +537,14 @@ public static class Sgs
                 //IMPLEMENT: trigger a platform-specific payment method
                 //IMPORTANT: Don't say `gs.isPaidPlayer = true;` quite yet. This will prompt whatever interface apple uses for in app purchases, and after they have actually paid via these means, THEN you can do the aforementioned line of code.
                 //but for now, I will ignore the above comment for testing purposes
+//left off
+                //apple
+
+//DEPRACATED If handled in IAPs.cs
+                //sgs
                 gs.hasUnlockedGameB = true;
                 NewMenuPage(Pages.Home);
+
                 break;
             case SgsButtonHandler.BuyGameC:
                 gs.hasUnlockedGameC = true;

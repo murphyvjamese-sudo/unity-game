@@ -16,6 +16,7 @@ public class StartupManager : MonoBehaviour
 
     async void Start()
     {
+        Application.targetFrameRate = 60;
         GlobalState gs = FindObjectOfType<GlobalState>();
 
         if(isTestingIsolated)
