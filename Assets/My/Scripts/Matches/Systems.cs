@@ -704,7 +704,6 @@ public class Systems : MonoBehaviour
                                     { //else, perform the usual consequence for physical damage.
                                         if(f.GetComponent<HasBounty>() != null && e.GetComponent<Projectiles>() == null || e.GetComponent<Projectiles>() != null && !e.GetComponent<Projectiles>().isShotFromPlayer)
                                         { //if this object has a bounty on its head, and something other than the player destroys it, remove the bounty so it won't grant extra points when DeathSystem() clears it out and rewards points accordingly
-                                            Debug.Log("remove bounty physical");
                                             DestroyImmediate(f.GetComponent<HasBounty>());
                                         }
                                         fDeath.isDeathFlagged = true;
@@ -733,7 +732,6 @@ public class Systems : MonoBehaviour
                                     }
                                     if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
                                     { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
-                                        Debug.Log("poison will deliver bounty");
                                         fAilments.retainBountyWithPoison = true;
                                     }
                                 }
@@ -974,7 +972,6 @@ public class Systems : MonoBehaviour
                         //Actually, I think the bug was me just using the wrong variableeAilments.poison++; //this solves a bug where by the end of this system, poison counter reduced to -1 like it was never poisoned, so this poison can't transfer over into payload spawn, ie a large poisoned asteroid spawning two smaller, also poisoned asteroids.
                         if(e.GetComponent<HasBounty>() != null && !eAilments.retainBountyWithPoison)
                         { //if this has a bounty and something other than the player poisoned it, remove the bounty so it won't get processed in DeathSystem for double points
-                            Debug.Log("remove bounty poison");
                             DestroyImmediate(e.GetComponent<HasBounty>());
                         }
                         e.GetComponent<Death>().isDeathFlagged = true;
@@ -1079,7 +1076,7 @@ public class Systems : MonoBehaviour
                     try
                     { //try to set cooldown if object has collisions cpnt
                         Collisions.Receive receive = instance.GetComponent<Collisions>().receive;
-                        receive.temporaryImmunityCounter = receive.temporaryImmunityDuration;
+                        receive.temporaryImmunityCounter = receive.temporaryImmunityDuration * 4; //it's normally 5, set in Collisions.cs, but for here, you want items that are dropped from a payload to not be collectible for a second. Otherwise, the two small asteroids that are spawned from large asteroid will collide with each other (not the explosion) and die almost immediately.
                     }
                     catch
                     {
@@ -1099,7 +1096,6 @@ public class Systems : MonoBehaviour
             if(death.GetComponent<HasBounty>() != null)
             {
                 pointsValue *= 3;
-                Debug.Log("pretty print bounty");
                 pointsText.fill = new UnityEngine.Color(1, 0.65f, 0);
             }
             pointsText.message = pointsValue.ToString();  //print however many points the object was worth
