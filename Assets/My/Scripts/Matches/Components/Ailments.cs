@@ -10,4 +10,5 @@ public class Ailments : MonoBehaviour
     [HideInInspector] public int freezeCounter = RESET;
     [HideInInspector] public int poisonCounter = RESET;
     public int lifespan = RESET;  //OR, You can set this in the inspector if you want the object to die after a certain duration. For example, an AOE
+    [HideInInspector] public bool retainBountyWithPoison; //set this to true if the PLAYER was the one who poisoned the target, so that bounty award will still be given accordingly. 
 }

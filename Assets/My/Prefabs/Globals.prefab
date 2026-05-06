@@ -213,7 +213,7 @@ MonoBehaviour:
   playerConfiguration:
     upgrades: 0000000004000000
     ammo: 0
-    copilot: 4
+    copilot: 3
     shipAppearance: 0
 --- !u!114 &3544691605682332110
 MonoBehaviour:

@@ -4,17 +4,23 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Leaderboards.Models;
 using System.Threading.Tasks;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class LeaderboardUIData
 {
+    public double worldRecordA;
     public double scoreA;
     public int rankA;
     public int totalPlayersA;
     public float percentileA;
+
+    public double worldRecordB;
     public double scoreB;
     public int rankB;
     public int totalPlayersB;
     public float percentileB;
+
+    public double worldRecordC;
     public double scoreC;
     public int rankC;
     public int totalPlayersC;
@@ -143,6 +149,18 @@ public static class Leaderboards
     public static async Task<LeaderboardUIData> GetLeaderboardUIData()
     {
         //helper methods
+        async Task<double> GetWorldRecord(string leaderboardId)
+        {
+            try
+            {
+                var leaderboardScores = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId);
+                return leaderboardScores.Results[0].Score;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         async Task<double> GetScore(string leaderboardId)
         {
             try
@@ -182,6 +200,7 @@ public static class Leaderboards
 
         LeaderboardUIData luid = new LeaderboardUIData();
 
+        luid.worldRecordA = await GetWorldRecord("gameA");
         luid.scoreA = await GetScore("gameA");
         luid.rankA = await GetRank("gameA");
         luid.totalPlayersA = await GetTotalPlayers("gameA");
@@ -190,6 +209,7 @@ public static class Leaderboards
             luid.percentileA = (float)luid.rankA / (float)luid.totalPlayersA;
         }
 
+        luid.worldRecordB = await GetWorldRecord("gameB");
         luid.scoreB = await GetScore("gameB");
         luid.rankB = await GetRank("gameB");
         luid.totalPlayersB = await GetTotalPlayers("gameB");
@@ -199,6 +219,7 @@ public static class Leaderboards
         }
 
         /*UNCOMMENT once ready for game c app update
+        luid.worldRecordC = await GetWorldRecord("gameC");
         luid.scoreC = await GetScore("gameC");
         luid.rankC = await GetRank("gameC");
         luid.totalPlayersC = await GetTotalPlayers("gameC");

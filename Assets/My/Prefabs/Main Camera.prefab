@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1748044651602319081}
   - component: {fileID: -372572468741443574}
   - component: {fileID: 8599650895456721681}
-  - component: {fileID: 3128988628167903605}
   - component: {fileID: 2752118907871831056}
+  - component: {fileID: 2694375771625983715}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -64,9 +64,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.101379305
+    x: 0.125
     y: 0
-    width: 0.7972414
+    width: 0.75
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -120,7 +120,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e42212b37404433ad215f45980a076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3128988628167903605
+--- !u!114 &2752118907871831056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5337071894100177465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6744de0e310f646f8b84afe7a550c382, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SquareCamera
+--- !u!114 &2694375771625983715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,7 +143,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_EditorClassIdentifier: 
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
@@ -164,15 +176,3 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &2752118907871831056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5337071894100177465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6744de0e310f646f8b84afe7a550c382, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SquareCamera

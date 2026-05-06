@@ -18,18 +18,20 @@ public class StartupManager : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         GlobalState gs = FindObjectOfType<GlobalState>();
+        IAPs iaps = FindFirstObjectByType<IAPs>();
 
         if(isTestingIsolated)
         {
-            
+            //this might not be necessary. I implemented this if/else because I was having trouble getting a scene to work in isolation for quick and easy debugging without menus and the likes
         }
         else
         {
-            splashScreenDuration = 50;
+            splashScreenDuration = 100;
             splashScreenCounter = splashScreenDuration;
 
             await Leaderboards.ConnectToLeaderboards();
             await Leaderboards.SyncLeaderboards(gs);
+            iaps.InitializeIAP(); //could have performed this by adding an Await() method to the IAP game object that manages in app purchases, but apparently it is bad to make Await() and Start() asynchronous, so I am trying to isolate it to just this one StartupManager async void Start() call.
         }
     }
 

@@ -72,10 +72,23 @@ Shader "Unlit/Pixel"
                 { //if raw text image data is black (fill), change color to specified
                     color.rgb = float3(_Fill.r, _Fill.g, _Fill.b);
                 }
-                if(_IsFrozen && color.a != 0)
+                /*if(_IsFrozen && color.a != 0) //original version when this game was black and white
                 {  //turns all opaque pixels white (might make this more advanced in future, since objects that are pallette swaps would be indistinguishable from each other if this shader applied.)
                     //one idea for visual distinction is to only apply this shader to the top half of the image?
                     color.rgb = float3(1, 1, 1);  //opaque white
+                }*/
+                /*if(_IsFrozen)
+                { //originally from tiki tides
+                    float average = (color.r + color.g + color.b) / 3.0;
+                    float bluescale = 1.0 - average / 2.0;
+                    color.rgb = float3(bluescale / 2.0, bluescale, 1);
+                }*/
+                if(_IsFrozen)
+                {
+                    float intensity = (color.r + color.g + color.b) / 3.0;
+                    float k = 1.6; //greater than 1 pushes a number away from the midpoint, .5 in this case, whereas less than one pulls it closer to the midpoint.
+                    float contrast = (intensity -.25) * k + .5;
+                    color.rgb = float3(contrast / 2, contrast, 1);
                 }
                 if(_IsInverted)
                 {  //same as high contrast - colors become opposites of each other.

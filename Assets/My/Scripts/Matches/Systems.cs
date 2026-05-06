@@ -198,9 +198,15 @@ public class Systems : MonoBehaviour
                 { //if a poison or freeze timer is halfway out, have the mechanic fix your ship
                     if (eCopilot.GetComponent<Ailments>() != null)
                     {
+                        PowerupsApplied ePowerupsApplied = e.GetComponent<PowerupsApplied>();
                         Ailments eAilments = eCopilot.GetComponent<Ailments>();
-                        float fixDelay = eAilments.freezeDuration * .5f;  //only fix the ailment after a certain percentage (decimal) of the full duration of freeze duration has passed.
-                        if ((eAilments.freezeCounter < eAilments.freezeDuration - fixDelay && eAilments.freezeCounter > 2) || (eAilments.poisonCounter < eAilments.poisonDuration - fixDelay && eAilments.poisonCounter > 2))
+                        int additionalPoisonDelay = 0;
+                        float fixDelay = eAilments.freezeDuration * .3f;  //only fix the ailment after a certain percentage (decimal) of the full duration of freeze duration has passed.
+                        if(ePowerupsApplied != null && ePowerupsApplied.isForceFieldPoweruped)
+                        {
+                            additionalPoisonDelay = Mathf.RoundToInt(eAilments.poisonDuration * .5f);
+                        }
+                        if ((eAilments.freezeCounter < eAilments.freezeDuration - fixDelay && eAilments.freezeCounter > 2) || (eAilments.poisonCounter < eAilments.poisonDuration - fixDelay + additionalPoisonDelay && eAilments.poisonCounter > 2))
                         {
                             ShowIcon(eCopilot.copilot, eCopilot.gameObject);
                             Utilities.Heal(eCopilot.gameObject);
@@ -211,7 +217,7 @@ public class Systems : MonoBehaviour
                 { //the navigator spawns a powerup at the edge of the game world every y seconds. After you collect that powerup (marked visually with an x), the navigator will wait another y seconds before finding another powerup at the edge of the game world.
                     if (!IsNavigatorPowerupFound() && eCopilot.counter == -1)
                     { //if a navigator powerup is unavailable, start the timer to find one
-                        eCopilot.counter = eCopilot.duration;
+                        eCopilot.counter = eCopilot.duration * 3;
                     }
                     if (eCopilot.counter >= 0)
                     {
@@ -650,12 +656,23 @@ public class Systems : MonoBehaviour
                             { //you should call this before every negative collision scenario (poison, freeze, damage, conversion, etc) so that the force field will protect you instead of the usual effect taking place.
                                 if (f.GetComponent<PowerupsApplied>() != null && f.GetComponent<PowerupsApplied>().isForceFieldPoweruped)
                                 { //if there is a force field involved
-                                    f.GetComponent<PowerupsApplied>().isForceFieldPoweruped = false; //remove the force field on a collisions logic level
-                                    foreach (Transform child in f.transform)
-                                    { //iterate through all of f's children
-                                        if (child.gameObject.GetComponent<Identification>() != null && child.gameObject.GetComponent<Identification>().name == Identification.Name.ForceField)
-                                        { //remove force field visual
-                                            Destroy(child.gameObject);
+                                    if(!eCollisions.deliver.isConvertive && !eCollisions.deliver.isPoison)
+                                    {
+                                        f.GetComponent<PowerupsApplied>().isForceFieldPoweruped = false; //remove the force field on a collisions logic level
+                                        foreach (Transform child in f.transform)
+                                        { //iterate through all of f's children
+                                            if (child.gameObject.GetComponent<Identification>() != null && child.gameObject.GetComponent<Identification>().name == Identification.Name.ForceField)
+                                            { //remove force field visual
+                                                Destroy(child.gameObject);
+                                                if(f.GetComponent<Ailments>() != null)
+                                                {
+                                                    Ailments fAilments = f.GetComponent<Ailments>();
+                                                    if(fAilments.poisonCounter > fAilments.poisonDuration)
+                                                    { //handles minor bug where a poisoned force field gets destroyed, leaving the object that had the force field with an extended poisonCounter.
+                                                        fAilments.poisonCounter = fAilments.poisonDuration;
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                     fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDuration; //set a cooldown so you don't just get hit by the exact same thing next frame
@@ -685,6 +702,11 @@ public class Systems : MonoBehaviour
                                     }
                                     else
                                     { //else, perform the usual consequence for physical damage.
+                                        if(f.GetComponent<HasBounty>() != null && e.GetComponent<Projectiles>() == null || e.GetComponent<Projectiles>() != null && !e.GetComponent<Projectiles>().isShotFromPlayer)
+                                        { //if this object has a bounty on its head, and something other than the player destroys it, remove the bounty so it won't grant extra points when DeathSystem() clears it out and rewards points accordingly
+                                            Debug.Log("remove bounty physical");
+                                            DestroyImmediate(f.GetComponent<HasBounty>());
+                                        }
                                         fDeath.isDeathFlagged = true;
                                     }
                                 }
@@ -697,6 +719,10 @@ public class Systems : MonoBehaviour
                                     if (ConsiderForceField())
                                     {
                                         //if there was a force field, do nothing except what is defined in ConsiderForceField()
+                                        GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
+                                        poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
+                                        poisonAura.transform.localPosition = new Vector2(0, 0);
+                                        fAilments.poisonCounter = Mathf.RoundToInt(fAilments.poisonDuration * 1.5f); //make the poison last 1.5 times as long, and delete the force field elsewhere once the extra time has run out.
                                     }
                                     else
                                     { //else, perform the usual consequence for poison attacks
@@ -704,6 +730,11 @@ public class Systems : MonoBehaviour
                                         poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
                                         poisonAura.transform.localPosition = new Vector2(0, 0);
                                         fAilments.poisonCounter = fAilments.poisonDuration;
+                                    }
+                                    if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
+                                    { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
+                                        Debug.Log("poison will deliver bounty");
+                                        fAilments.retainBountyWithPoison = true;
                                     }
                                 }
                                 if (eCollisions.deliver.isFreeze && !fCollisions.receive.isFreezeImmune)
@@ -918,6 +949,19 @@ public class Systems : MonoBehaviour
                 if (eAilments.poisonCounter >= 0)
                 {
                     eAilments.poisonCounter--;
+                    if(eAilments.poisonCounter == eAilments.poisonDuration && e.GetComponent<PowerupsApplied>() != null && e.GetComponent<PowerupsApplied>().isForceFieldPoweruped)
+                    { //when you get poisoned with a force field on, the duration will last 1.5 times as long, effectively meaning the force field will be "poisoned" for the first third of the total duration, and once it counts back down to the normal value of poisonDuration, the shield will break and the player will remain poisoned.
+                        PowerupsApplied ePowerupsApplied = e.GetComponent<PowerupsApplied>();
+                        ePowerupsApplied.isForceFieldPoweruped = false;
+                        foreach (Transform child in e.transform)
+                        { //iterate through all of f's children
+                            if (child.gameObject.GetComponent<Identification>() != null && child.gameObject.GetComponent<Identification>().name == Identification.Name.ForceField)
+                            { //remove force field visual
+                                Destroy(child.gameObject);
+                            }
+                        }
+
+                    }
                 }
                 if (eAilments.lifespan >= 0)
                 {
@@ -928,6 +972,11 @@ public class Systems : MonoBehaviour
                     if (e.GetComponent<Death>() != null)
                     {
                         //Actually, I think the bug was me just using the wrong variableeAilments.poison++; //this solves a bug where by the end of this system, poison counter reduced to -1 like it was never poisoned, so this poison can't transfer over into payload spawn, ie a large poisoned asteroid spawning two smaller, also poisoned asteroids.
+                        if(e.GetComponent<HasBounty>() != null && !eAilments.retainBountyWithPoison)
+                        { //if this has a bounty and something other than the player poisoned it, remove the bounty so it won't get processed in DeathSystem for double points
+                            Debug.Log("remove bounty poison");
+                            DestroyImmediate(e.GetComponent<HasBounty>());
+                        }
                         e.GetComponent<Death>().isDeathFlagged = true;
                     }
                 }
@@ -944,7 +993,6 @@ public class Systems : MonoBehaviour
 
                         //also, create a special sound effect for when you are powered up and jetting around. Attach it to the game object that actually got the jet powerup so it is easier to find and stop this noise at the correct event that the jet powerup ends, such that AudioSystem() can clean up the garbage after.
                         GameObject noise = Instantiate(gr.JetPowerupNoise);
-                        Debug.Log("instantiate jet noise");
                         noise.transform.parent = e.transform;
                     }
                     if (ePowerupsApplied.jetPowerupCounter % eJetTrailVisual.moduloInterval == 0)
@@ -999,7 +1047,7 @@ public class Systems : MonoBehaviour
                     {
                         Ailments rootAilments = death.GetComponent<Ailments>();
                         Ailments spawnAilments = instance.GetComponent<Ailments>();
-                        if(rootAilments.poisonCounter == 0)
+                        if(rootAilments.poisonCounter >= 0)
                         {
                             spawnAilments.poisonCounter = spawnAilments.poisonDuration;
                             GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
@@ -1045,25 +1093,33 @@ public class Systems : MonoBehaviour
         {
             int pointsValue = 0;
             GameObject points = Instantiate(gr.Points);
+            Text pointsText = points.GetComponent<Text>();
             points.transform.position = death.gameObject.transform.position;  //position points message where the thing that was destroyed died
             pointsValue = death.points;
             if(death.GetComponent<HasBounty>() != null)
             {
-                pointsValue *= 2;
+                pointsValue *= 3;
+                Debug.Log("pretty print bounty");
+                pointsText.fill = new UnityEngine.Color(1, 0.65f, 0);
             }
-            points.GetComponent<Text>().message = pointsValue.ToString();  //print however many points the object was worth
+            pointsText.message = pointsValue.ToString();  //print however many points the object was worth
         }
         foreach (GameObject e in entities)
         {
             if (e.GetComponent<Death>() != null && e.GetComponent<Death>().isDeathFlagged)
             {
                 Death eDeath = e.GetComponent<Death>();
+                Intelligence eIntelligence = e.GetComponent<Intelligence>();
+
                 DropPayload(eDeath);
-                if (eDeath.points != 0)
+                if(eIntelligence == null || eIntelligence != null && eIntelligence.team == Intelligence.Team.Dark)
                 {
-                    PrintPoints(eDeath);
+                    if (eDeath.points != 0)
+                    {
+                        PrintPoints(eDeath);
+                    }
+                    gs.currentScore += eDeath.points;
                 }
-                gs.currentScore += eDeath.points;
                 Destroy(e);
             }
         }

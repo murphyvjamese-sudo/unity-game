@@ -19,7 +19,7 @@ public static class Sgs
         public static Color[] header = {new Color(1, 0.65f, 0), new Color(0.63f, 0.29f, 0)};
 
         //grey, dark-purple
-        public static Color[] lockedButton = {new Color(0.65f, 0.65f, 0.65f), new Color(0.5f, 0, .75f)};
+        public static Color[] lockedButton = {new Color(0.25f, 0.25f, 0.25f), new Color(0.1f, 0.1f, .1f)};
 
         //yellow-green, dark-green
         public static Color[] button = {new Color(0, 0.25f, 0), new Color(0.5f, 1, 0)};
@@ -157,11 +157,13 @@ public static class Sgs
                 MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
                 MakeButton(-70, -60, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
                 MakeButton(-70, -80, "Game C", SgsButtonHandler.PlayGameC, TextColors.button);
+                MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
             }
             else if(gs.hasUnlockedGameB)
             {
                 MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
                 MakeButton(-70, -60, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
+                MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
             }
             else
             {  //unpaid player. base game
@@ -169,14 +171,15 @@ public static class Sgs
                 { //don't allow players to click buttons to play games when they first open the app. They must read the tutorial first
                     MakeText(-70, -40, "Game A", TextColors.lockedButton);
                     MakeText(-70, -60, "Game B", TextColors.lockedButton);
+                    MakeText(-70, -80, "Leaderboards", TextColors.lockedButton);
                 }
                 else
                 {
                     MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
                     MakeButton(-70, -60, "Game B", SgsButtonHandler.UnlockGameB, TextColors.lockedButton);
+                    MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
                 }
             }
-            MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
         }
         void CreateAdvertiseGameBPage()
         {
@@ -237,36 +240,49 @@ public static class Sgs
             { //if you are connected to internet, attempt to generate the leaderboards.
                 //Note, if you display rank / totalPlayersOnLeaderboard on the screen, you could fit about 12-13 digits on the screen, which equates to hundreds of billions, if not nine trillion total people on the leaderboard. Way more than you'd ever need, so no need to worry about dynamically generated numbers running offscreen.
                 LeaderboardUIData luid = await Leaderboards.GetLeaderboardUIData();
+                int yParagraph = 0;
 
                 //show Game A stats
+                yParagraph = 80;
                 if(luid.scoreA > 0)
                 {
+                    MakeText(-90, yParagraph, "Game A:", TextColors.information);
+                    MakeText(-90, yParagraph - 10, "World Record: " + luid.worldRecordA, TextColors.information);
+                    MakeText(-90, yParagraph - 20, "My Best: " + luid.scoreA, TextColors.information);
+                    MakeText(-90, yParagraph - 30, "" + luid.rankA + "/" + luid.totalPlayersA + ",", TextColors.information);
+                    MakeText(-90, yParagraph - 40, "Top " + Mathf.RoundToInt(luid.percentileA * 100) + "%", TextColors.information);
+
+                    /*Old display
                     MakeText(-90, 50, "Game A:" + luid.scoreA, TextColors.information);
                     MakeText(-90, 40, "Top " + Mathf.RoundToInt(luid.percentileA * 100) + "%", TextColors.information);
                     MakeText(-90, 30, "" + luid.rankA + "/" + luid.totalPlayersA, TextColors.information);
+                    */
                 }
                 else
                 {
-                    MakeText(-90, 50, "Game A: No submissions yet!", TextColors.information);
+                    MakeText(-90, yParagraph, "Game A: No submissions yet!", TextColors.information);
                 }
 
                 //show Game B stats
+                yParagraph -= 60;
                 if(gs.hasUnlockedGameB)
                 {
                     if(luid.scoreB > 0)
                     { //you have an entry in the leaderboards
-                        MakeText(-90, 10, "Game B:" + luid.scoreB, TextColors.information);
-                        MakeText(-90, 0, "Top " + Mathf.RoundToInt(luid.percentileB * 100) + "%", TextColors.information);
-                        MakeText(-90, -10, "" + luid.rankB + "/" + luid.totalPlayersB, TextColors.information);
+                        MakeText(-90, yParagraph, "Game B:", TextColors.information);
+                        MakeText(-90, yParagraph - 10, "World Record: " + luid.worldRecordB, TextColors.information);
+                        MakeText(-90, yParagraph - 20, "My Best: " + luid.scoreB, TextColors.information);
+                        MakeText(-90, yParagraph - 30, "" + luid.rankB + "/" + luid.totalPlayersB + ",", TextColors.information);
+                        MakeText(-90, yParagraph - 40, "Top " + Mathf.RoundToInt(luid.percentileB * 100) + "%", TextColors.information);
                     }
                     else
                     { //you have yet to submit an entry to the leaderboards
-                        MakeText(-90, 10, "Game B: No submissions yet!", TextColors.information);
+                        MakeText(-90, yParagraph, "Game B: No submissions yet!", TextColors.information);
                     }
                 }
                 
                 //show Game C stats
-                /*UNCOMMENT when ready for game c app update:
+                /*UNCOMMENT when ready for game c app update: OUTDATED - make sure to properly model this off the same pattern found for game a and b
                 if(gs.hasUnlockedGameC)
                 {
                     if(luid.scoreC > 0)

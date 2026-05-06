@@ -49,7 +49,7 @@ public class Collisions : MonoBehaviour
 
     void Awake()
     {
-        receive.temporaryImmunityDuration = 30;
+        receive.temporaryImmunityDuration = 5;
         receive.temporaryImmunityCounter = 0;
     }
 }

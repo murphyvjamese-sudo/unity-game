@@ -87,6 +87,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3782660631169165732, guid: 86dd4cee4005b418bad82082e06e14c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3192636671831707436}
+    - targetCorrespondingSourceObject: {fileID: 3782660631169165732, guid: 86dd4cee4005b418bad82082e06e14c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4209521607414446959}
   m_SourcePrefab: {fileID: 100100000, guid: 86dd4cee4005b418bad82082e06e14c6, type: 3}
 --- !u!1 &7937168562560805001 stripped
 GameObject:
@@ -108,3 +111,16 @@ MonoBehaviour:
   isNPC: 1
   isLeftButtonPressed: 0
   isRightButtonPressed: 0
+--- !u!114 &4209521607414446959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7937168562560805001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b7970d6ceff47beac3d947f548c59c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Projectiles
+  isShotFromPlayer: 0

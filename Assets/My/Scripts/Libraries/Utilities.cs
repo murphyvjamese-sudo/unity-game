@@ -169,6 +169,7 @@ public static class Utilities
         {
             rAilments.freezeCounter = 1;  //but 0 is better here because unlike poison, the end result of freeze is a good thing. Even more complicated, I have to make this 1 for proper timing with the timing system logic! I should really have encapsulated this logic. What a maintenance nightmare to try and remember these details!
             rAilments.poisonCounter = -1;  //-1 ends the timer without causing the bad effect to happen
+            rAilments.retainBountyWithPoison = false; //might be unnecessary, but I don't want an object to get healed from a bounty hunter player's poison, then get poisoned from something else and die rewarding the bounty hunter.
         }
 
         //remove any visual effects:
@@ -346,6 +347,11 @@ public static class Utilities
         if (eSA.spawn != null && eSA.otherSpawn != null)
         {
             eSA.isPointingToOtherSpawn = !eSA.isPointingToOtherSpawn;  //toggle between which special action you want to do. (Think terriloomer)
+        }
+        if(e.GetComponent<Copilot>() != null && e.GetComponent<Copilot>().copilot == GlobalState.PlayerConfiguration.Copilot.BountyHunter && selectedSpawn.GetComponent<Projectiles>())
+        { //if this is the player, and it is shooting a projectile, make sure that projectile is able to communicate that it is from the player, so that a bounty hunter copilot can get it's reward.
+            Debug.Log("shot from bounty hunter");
+            selectedSpawn.GetComponent<Projectiles>().isShotFromPlayer = true;
         }
         if (selectedSpawn != null && selectedSpawn.GetComponent<Kinematics>() != null && selectedSpawn.GetComponent<Collisions>() && eKinematics != null)
         {

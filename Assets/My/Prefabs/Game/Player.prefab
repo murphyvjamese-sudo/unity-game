@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c2eeb2133c54e28b408c17cc353e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copilot: 4
+  copilot: 3
   outerRimRadius: 0
   counter: 0
   duration: 0
