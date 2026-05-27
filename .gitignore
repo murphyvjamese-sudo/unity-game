@@ -1,6 +1,10 @@
 # My stuff
 Builds/
 
+# MacOS Metadata
+.DS_Store
+._*
+
 # Unity generated folders
 [Ll]ibrary/
 [Tt]emp/
