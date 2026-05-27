@@ -6,6 +6,7 @@ using UnityEngine;
 public class World : MonoBehaviour
 {
     public int gameOverCounter;
+    public int gameOverDuration;
     public int level;  //as this increases, new enemies will start to appear, and spawn speed will decrease.
     
     public int spawnRadius;  //defines where enemies start spawning from. This is off the screen, so probably like 150 or something. Not to be confused with the radius of visibility. That is defined as an attribute of the player.
@@ -19,7 +20,8 @@ public class World : MonoBehaviour
     void Awake()
     {
         GlobalReferences gr = FindObjectOfType<GlobalReferences>();
-        gameOverCounter = 100;
+        gameOverDuration = 100;
+        gameOverCounter = gameOverDuration;
         if (gr != null)
         {
             //order of spawnSelections matters, as you will make a sub-array for which game objects can appear in the scene.

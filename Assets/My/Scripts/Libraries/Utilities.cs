@@ -298,6 +298,48 @@ public static class Utilities
         return r;
     }
 
+    public static int MapPhysicalAttack(Collisions.Deliver.Damage attack)
+    {
+        int r = 0;
+        switch(attack)
+        {
+            case Collisions.Deliver.Damage.None:
+            r = 0;
+            break;
+            case Collisions.Deliver.Damage.VeryWeak:
+            r = 1;
+            break;
+            case Collisions.Deliver.Damage.Weak:
+            r = 2;
+            break;
+            case Collisions.Deliver.Damage.Strong:
+            r = 3;
+            break;
+        }
+        return r;
+    }
+
+    public static int MapDefense(Collisions.Receive.Defense defense)
+    {
+        int r = 0;
+        switch(defense)
+        {
+            case Collisions.Receive.Defense.Ignore:
+            r = 4;
+            break;
+            case Collisions.Receive.Defense.VeryWeak:
+            r = 1;
+            break;
+            case Collisions.Receive.Defense.Weak:
+            r = 2;
+            break;
+            case Collisions.Receive.Defense.Strong:
+            r = 3;
+            break;
+        }
+        return r;
+    }
+
     public static int MapReloadSpeed(SpecialActions sa)
     {
         int r = 0;
@@ -350,7 +392,6 @@ public static class Utilities
         }
         if(e.GetComponent<Copilot>() != null && e.GetComponent<Copilot>().copilot == GlobalState.PlayerConfiguration.Copilot.BountyHunter && selectedSpawn.GetComponent<Projectiles>())
         { //if this is the player, and it is shooting a projectile, make sure that projectile is able to communicate that it is from the player, so that a bounty hunter copilot can get it's reward.
-            Debug.Log("shot from bounty hunter");
             selectedSpawn.GetComponent<Projectiles>().isShotFromPlayer = true;
         }
         if (selectedSpawn != null && selectedSpawn.GetComponent<Kinematics>() != null && selectedSpawn.GetComponent<Collisions>() && eKinematics != null)

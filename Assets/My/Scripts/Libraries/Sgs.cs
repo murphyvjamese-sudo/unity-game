@@ -38,7 +38,8 @@ public static class Sgs
         None = 6,
         AdvertiseGameC = 7,
         Tutorial = 8,
-        Leaderboards = 9
+        Leaderboards = 9,
+        Loading = 10
     }
     public enum GameModes
     {
@@ -126,8 +127,14 @@ public static class Sgs
         { //most menu pages will have a standard button location to return home
             MakeButton(20, -90, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
         }
+        void CreateLoadingPage()
+        {
+            Debug.Log("CreateLoadingPage()");
+            MakeText(-30, 20, "Loading...", TextColors.points);
+        }
         void CreateHomePage()
         {
+            int offsetY = 0;
             bool IsPlayingThemeAlready()
             {
                 Noise[] noises = Utilities.Searches.FindByComponent<Noise>();
@@ -150,34 +157,38 @@ public static class Sgs
 
             GameObject.Instantiate(gr.Title, new Vector3(0, 60, 0), Quaternion.identity);
 
-            MakeButton(-70, -20, "Tutorial", SgsButtonHandler.Tutorial, TextColors.button);
-
+            offsetY = -10;
+            MakeButton(-70, offsetY + 20, "Tutorial", SgsButtonHandler.Tutorial, TextColors.button);
             if(gs.hasUnlockedGameC)
             {
-                MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
-                MakeButton(-70, -60, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
-                MakeButton(-70, -80, "Game C", SgsButtonHandler.PlayGameC, TextColors.button);
-                MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                MakeButton(-70, offsetY, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
+                MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
+                MakeButton(-70, offsetY - 40, "Game C", SgsButtonHandler.PlayGameC, TextColors.button);
+                MakeButton(-70, offsetY - 60, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                MakeButton(-70, offsetY - 80, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
             }
             else if(gs.hasUnlockedGameB)
             {
-                MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
-                MakeButton(-70, -60, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
-                MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                MakeButton(-70, offsetY, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
+                MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
+                MakeButton(-70, offsetY - 40, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
             }
             else
             {  //unpaid player. base game
                 if(PlayerPrefs.GetInt("HasCompletedTutorial") == 0)
                 { //don't allow players to click buttons to play games when they first open the app. They must read the tutorial first
-                    MakeText(-70, -40, "Game A", TextColors.lockedButton);
-                    MakeText(-70, -60, "Game B", TextColors.lockedButton);
-                    MakeText(-70, -80, "Leaderboards", TextColors.lockedButton);
+                    MakeText(-70, offsetY, "Game A", TextColors.lockedButton);
+                    MakeText(-70, offsetY - 20, "Game B", TextColors.lockedButton);
+                    MakeText(-70, offsetY - 40, "Leaderboards", TextColors.lockedButton);
+                    MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
                 }
                 else
                 {
-                    MakeButton(-70, -40, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
-                    MakeButton(-70, -60, "Game B", SgsButtonHandler.UnlockGameB, TextColors.lockedButton);
-                    MakeButton(-70, -80, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                    MakeButton(-70, offsetY, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
+                    MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.UnlockGameB, TextColors.lockedButton);
+                    MakeButton(-70, offsetY - 40, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
+                    MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
                 }
             }
         }
@@ -403,6 +414,9 @@ public static class Sgs
         void CreateGameOverPage()
         {
             IncludeHighScore();
+            MakeText(-90, 90, "" + gs.currentScore, TextColors.points);
+            gs.currentScore = 0;
+
             MakeText(-30, 20, "Game Over...", TextColors.points);
             MakeButton(-90, -60, "Play Again", SgsButtonHandler.PlayAgain, TextColors.button);
             MakeButton(20, -60, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
@@ -411,6 +425,9 @@ public static class Sgs
         {
             switch (page)
             {
+                case Pages.Loading:
+                    CreateLoadingPage();
+                    break;
                 case Pages.Home:
                     CreateHomePage();
                     break;
@@ -522,8 +539,12 @@ public static class Sgs
             }
         }
 
+        IAPs iaps = GameObject.FindFirstObjectByType<IAPs>();
         switch (sgs)
         {
+            case SgsButtonHandler.Loading:
+                NewMenuPage(Pages.Loading);
+                break;
             case SgsButtonHandler.Leaderboards:
                 NewMenuPage(Pages.Leaderboards);
                 break;
@@ -550,6 +571,7 @@ public static class Sgs
                 NewMenuPage(Pages.AdvertiseGameC);
                 break;
             case SgsButtonHandler.BuyGameB:
+            /*
                 //IMPLEMENT: trigger a platform-specific payment method
                 //IMPORTANT: Don't say `gs.isPaidPlayer = true;` quite yet. This will prompt whatever interface apple uses for in app purchases, and after they have actually paid via these means, THEN you can do the aforementioned line of code.
                 //but for now, I will ignore the above comment for testing purposes
@@ -560,6 +582,11 @@ public static class Sgs
                 //sgs
                 gs.hasUnlockedGameB = true;
                 NewMenuPage(Pages.Home);
+            */
+                if(iaps != null)
+                {
+                    iaps.RequestPlatformBillingUI("GameB");  //brings up the purchasing UI for app store, google play, or fake store, depending on which platform the game is running. (Inside the editor triggers the fake store)           
+                }
 
                 break;
             case SgsButtonHandler.BuyGameC:
@@ -608,6 +635,12 @@ public static class Sgs
             case SgsButtonHandler.ReturnHome:
                 HandleReturnHomePage();
                 break;
+            case SgsButtonHandler.RestorePurchases: //this button is mandatory for apple review process. Maybe remove / declutter for Google Play Store?
+                if(iaps != null)
+                {
+                    iaps.RestorePurchases();
+                }
+                break;
             case SgsButtonHandler.PlayAgain:
                 StartMatch();  //this only works if you don't change the game state from previous round, which I believe won't be a problem.
                 break;
@@ -621,6 +654,8 @@ public static class Sgs
     }
     public enum SgsButtonHandler
     {  //I will try to organize each button into groupings of the same menus via indentation of this enum body
+        RestorePurchases = 26,
+        Loading = 25,
         Leaderboards = 24,
         Tutorial = 21,
         PlayGameA = 0,  //from main menu

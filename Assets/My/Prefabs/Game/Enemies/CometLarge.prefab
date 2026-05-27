@@ -126,7 +126,11 @@ PrefabInstance:
       objectReference: {fileID: 7854110006834991624, guid: 21c56b868e14640f79170088a23a2088, type: 3}
     - target: {fileID: 8735572266929712144, guid: 44bac64f1a8a94cbb8ef18d9347d43d5, type: 3}
       propertyPath: deliver.damage
-      value: 0
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735572266929712144, guid: 44bac64f1a8a94cbb8ef18d9347d43d5, type: 3}
+      propertyPath: receive.defense
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8735572266929712144, guid: 44bac64f1a8a94cbb8ef18d9347d43d5, type: 3}
       propertyPath: deliver.isFreeze

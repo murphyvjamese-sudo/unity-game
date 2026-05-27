@@ -6,7 +6,7 @@ public class Kinematics : MonoBehaviour
 {  //determines how objects move
     public Speed speed;  //How fast the object can move in a straight line. The actual number value for this is calculated in MatchManager.EstablishSpeed()
     public Acceleration acceleration;  //how fast the object can turn (change direction). The actual number value for this is calculated in MatchManager.EstablishAcceleration()
-    [HideInInspector] public float direction;  //angle representing direction the obj is facing.
+    /*[HideInInspector]*/ public float direction;  //angle representing direction the obj is facing.
 
     public enum Speed
     {

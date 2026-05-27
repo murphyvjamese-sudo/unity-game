@@ -201,7 +201,7 @@ public class Systems : MonoBehaviour
                         PowerupsApplied ePowerupsApplied = e.GetComponent<PowerupsApplied>();
                         Ailments eAilments = eCopilot.GetComponent<Ailments>();
                         int additionalPoisonDelay = 0;
-                        float fixDelay = eAilments.freezeDuration * .3f;  //only fix the ailment after a certain percentage (decimal) of the full duration of freeze duration has passed.
+                        float fixDelay = eAilments.freezeDuration * .4f;  //only fix the ailment after a certain percentage (decimal) of the full duration of freeze duration has passed.
                         if(ePowerupsApplied != null && ePowerupsApplied.isForceFieldPoweruped)
                         {
                             additionalPoisonDelay = Mathf.RoundToInt(eAilments.poisonDuration * .5f);
@@ -553,7 +553,6 @@ public class Systems : MonoBehaviour
                             //set current and desired pages, so that when scene loads on next frame, and Systems.MiscSystem() detects that currentPage == None, it will load the desired page.
                             gs.desiredPage = Sgs.Pages.GameOver;
                             gs.currentPage = Sgs.Pages.None;
-                            gs.currentScore = 0;
                             eWorld.camera.transform.position = new Vector3(0, 0, -10);
                         }
                     }
@@ -675,10 +674,10 @@ public class Systems : MonoBehaviour
                                             }
                                         }
                                     }
-                                    fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDuration; //set a cooldown so you don't just get hit by the exact same thing next frame
+                                    fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDurationLong; //set a cooldown so you don't just get hit by the exact same thing next frame
                                     return true;
                                 }
-                                fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDuration; //set a cooldown so you don't just get hit by the exact same thing next frame (must perform this inside and outside the above condition, to account for both function return paths)
+                                fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDurationLong; //set a cooldown so you don't just get hit by the exact same thing next frame (must perform this inside and outside the above condition, to account for both function return paths)
                                 return false;
                             }
                             if(e.GetComponent<Identification>() != null)
@@ -694,8 +693,8 @@ public class Systems : MonoBehaviour
                             }
                             if (fCollisions.receive.temporaryImmunityCounter == 0)
                             { //if there is no collision cooldown, consider all collision scenarios
-                                if (fCollisions.receive.defense != Collisions.Receive.Defense.Ignore && (eCollisions.deliver.damage == Collisions.Deliver.Damage.Strong || eCollisions.deliver.damage == Collisions.Deliver.Damage.Weak && fCollisions.receive.defense != Collisions.Receive.Defense.Strong))
-                                {  //if delivering damage, the receiver will be destroyed UNLESS it has strong defense and is facing a weak delivery. (Or has a force field)
+                                if(Utilities.MapDefense(fCollisions.receive.defense) <= Utilities.MapPhysicalAttack(eCollisions.deliver.damage)) //DEPRACATED: OLD CONDITION where I compared the couple values with direct logic. Not scalable when I realized I needed more values of defensive capability.(fCollisions.receive.defense != Collisions.Receive.Defense.Ignore && (eCollisions.deliver.damage == Collisions.Deliver.Damage.Strong || eCollisions.deliver.damage == Collisions.Deliver.Damage.Weak && fCollisions.receive.defense != Collisions.Receive.Defense.Strong))
+                                {  //if the defense is weaker than or equal to the attack, physical damage will occur
                                     if (ConsiderForceField())
                                     {
                                         //if there was a force field, do nothing except what is defined in ConsiderForceField()
@@ -734,6 +733,14 @@ public class Systems : MonoBehaviour
                                     { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
                                         fAilments.retainBountyWithPoison = true;
                                     }
+                                    if(f.GetComponent<PowerupsApplied>() != null)
+                                    {
+                                        PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
+                                        if(fPowerupsApplied.jetPowerupCounter > 0)
+                                        {
+                                            fPowerupsApplied.jetPowerupCounter = 0;
+                                        }
+                                    }
                                 }
                                 if (eCollisions.deliver.isFreeze && !fCollisions.receive.isFreezeImmune)
                                 {
@@ -760,6 +767,8 @@ public class Systems : MonoBehaviour
                                                 fAilments.freezeCounter = fAilments.freezeDuration;
                                             }
                                         }
+                                        fCollisions.swapToFrozenColliderFlag = true;
+                                        //DEPRACATED: Do this function outside of O(n^2) for loop, because order of entity e vs f matters, and can cause different / unpredictable results depending on order. Thus, as a general rule, colliders should not be modified mid collision delivery/recieving algorithm the fCollisions.SwapToFrozenCollider(); //do this after the other frozen effects take place, because the frozen collider only should be interacted with (as in shatter the ice) after the thing has actually been frozen.
                                     }
                                 }
                                 if (eCollisions.deliver.isConvertive && !fCollisions.receive.isConvertiveImmune)
@@ -823,6 +832,15 @@ public class Systems : MonoBehaviour
                         }
                     }
                 }
+            }
+        }
+        foreach(GameObject e in entities)
+        { //do this second iteration after all the collisions have taken place, where you can mutate the colliders after the collision logic has finished. Otherwise, if you mutate the colliders mid for loop, the order of entity e vs f matters, and unpredictable results can occur.
+            Collisions eCollisions = e.GetComponent<Collisions>();
+            if(eCollisions != null && eCollisions.swapToFrozenColliderFlag)
+            {
+                eCollisions.SwapToFrozenCollider();
+                eCollisions.swapToFrozenColliderFlag = false;
             }
         }
     }
@@ -923,7 +941,7 @@ public class Systems : MonoBehaviour
             if(e.GetComponent<Collisions>() != null && e.GetComponent<Collisions>().receive != null)
             { //handle collision cooldown timer. It will be reset in the collisions system
                 Collisions.Receive eReceive = e.GetComponent<Collisions>().receive;
-                if (eReceive.temporaryImmunityCounter == eReceive.temporaryImmunityDuration)
+                if (eReceive.temporaryImmunityCounter == eReceive.temporaryImmunityDurationShort)
                 {
                     //D\ebug.Log("start cd");
                 }
@@ -1029,6 +1047,15 @@ public class Systems : MonoBehaviour
 
     private void DeathSystem(GameObject[] entities)
     {
+        bool isGameOverButStillRunningForABit()
+        { //this detects after the player has died but everything is still running around for a bit before the scene switches to a menu, and the "game over" message officially prints. During this little pause, points must not be collected.
+            World world = GameObject.FindFirstObjectByType<World>();
+            if(world != null && world.gameOverCounter < world.gameOverDuration)
+            {
+                return true;
+            }
+            return false;
+        }
         void DropPayload(Death death)
         {
             int i = 0;
@@ -1038,6 +1065,7 @@ public class Systems : MonoBehaviour
                 {
                     GameObject instance = Instantiate(payload);
                     instance.transform.position = death.gameObject.transform.position;
+                    Collisions iCollisions = instance.GetComponent<Collisions>();
                     Kinematics iKinematics = instance.GetComponent<Kinematics>();
                     Kinematics parentKinematics = death.GetComponent<Kinematics>();
                     if(death.GetComponent<Ailments>() != null && instance.GetComponent<Ailments>() != null)
@@ -1056,8 +1084,22 @@ public class Systems : MonoBehaviour
                     {
                         float directionShift = 0;
                         if (i == 0)
-                        {
-                            //do nothing (included for clarity / reminder)
+                        { //i0 is for explosions. If the object is frozen, change the explosions from large -> freeze pulse, and small -> null
+                            if(iCollisions != null)
+                            {
+                                if(iCollisions.size == Collisions.Size.ExtraLarge)
+                                {
+                                    Destroy(instance);
+                                    instance = Instantiate(gr.FreezePulse);
+                                    instance.transform.position = death.gameObject.transform.position;
+                                    Debug.Log("freeze pulse!");
+                                }
+                                else if(iCollisions.size == Collisions.Size.Large)
+                                {
+                                    Destroy(instance);
+                                    Debug.Log("freeze null!");
+                                }
+                            }
                         }
                         else if (i == 1)
                         { //i1 is asteroid/comet child
@@ -1076,7 +1118,7 @@ public class Systems : MonoBehaviour
                     try
                     { //try to set cooldown if object has collisions cpnt
                         Collisions.Receive receive = instance.GetComponent<Collisions>().receive;
-                        receive.temporaryImmunityCounter = receive.temporaryImmunityDuration * 4; //it's normally 5, set in Collisions.cs, but for here, you want items that are dropped from a payload to not be collectible for a second. Otherwise, the two small asteroids that are spawned from large asteroid will collide with each other (not the explosion) and die almost immediately.
+                        receive.temporaryImmunityCounter = receive.temporaryImmunityDurationLong;
                     }
                     catch
                     {
@@ -1108,8 +1150,8 @@ public class Systems : MonoBehaviour
                 Intelligence eIntelligence = e.GetComponent<Intelligence>();
 
                 DropPayload(eDeath);
-                if(eIntelligence == null || eIntelligence != null && eIntelligence.team == Intelligence.Team.Dark)
-                {
+                if((eIntelligence == null || eIntelligence != null && eIntelligence.team == Intelligence.Team.Dark) && !isGameOverButStillRunningForABit())
+                { //if something on the dark team or no team dies, and the game has not ended, generate points
                     if (eDeath.points != 0)
                     {
                         PrintPoints(eDeath);
@@ -1277,6 +1319,10 @@ public class Systems : MonoBehaviour
                         sr.GetPropertyBlock(mpb);
                         mpb.SetFloat("_IsFrozen", 0);
                         sr.SetPropertyBlock(mpb);
+                        if(e.GetComponent<Collisions>() != null)
+                        {
+                            e.GetComponent<Collisions>().ReturnToNormalCollider();
+                        }
                     }
                 }
                 if (e.GetComponent<Kinematics>() != null)
@@ -1378,6 +1424,7 @@ public class Systems : MonoBehaviour
                     letterGO.transform.parent = text.transform;  //make letterGameObject a child of the overall "Text" prefab object
                     letterGO.transform.localPosition = new Vector2(text.cursorX, text.cursorY);  //position letterGameObject locally relative to its parent
                     letterSR = letterGO.AddComponent<SpriteRenderer>();
+                    letterSR.sortingLayerName = "UI";
                     letterSR.sprite = letter;
                     letterSR.material = text.material;
                     letterSR.GetPropertyBlock(mpb);
