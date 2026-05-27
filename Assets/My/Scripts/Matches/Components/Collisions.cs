@@ -72,13 +72,11 @@ public class Collisions : MonoBehaviour
     }
     public void SwapToFrozenCollider()
     {
-        Debug.Log("freeze swap -> frozen");
         deliver = frozenDeliver;
         receive = frozenReceive;
     }
     public void ReturnToNormalCollider()
     {
-        Debug.Log("freeze swap -> normal");
         deliver = rememberedOriginalDeliver;
         receive = rememberedOriginalReceive;
     }

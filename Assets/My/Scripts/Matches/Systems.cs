@@ -765,6 +765,11 @@ public class Systems : MonoBehaviour
                                             else if (fAilments != null && fAilments.freezeCounter <= 0)
                                             {  //just do basic freeze functionality, unless already frozen.
                                                 fAilments.freezeCounter = fAilments.freezeDuration;
+                                                if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
+                                                {
+                                                    fAilments.isFrozenByBountyHunter = true;
+                                                    Debug.Log("bounty: remember frozen by player");
+                                                }
                                             }
                                         }
                                         fCollisions.swapToFrozenColliderFlag = true;
@@ -983,6 +988,11 @@ public class Systems : MonoBehaviour
                 {
                     eAilments.lifespan--;
                 }
+                if(eAilments.freezeCounter == 0)
+                {
+                    eAilments.isFrozenByBountyHunter = false;
+                    Debug.Log("bounty: remove by timer running out");
+                }
                 if (eAilments.poisonCounter == 0 || eAilments.lifespan == 0)
                 {
                     if (e.GetComponent<Death>() != null)
@@ -1085,19 +1095,17 @@ public class Systems : MonoBehaviour
                         float directionShift = 0;
                         if (i == 0)
                         { //i0 is for explosions. If the object is frozen, change the explosions from large -> freeze pulse, and small -> null
-                            if(iCollisions != null)
+                            if(iCollisions != null && death.GetComponent<Ailments>() != null && death.GetComponent<Ailments>().freezeCounter > 0)
                             {
                                 if(iCollisions.size == Collisions.Size.ExtraLarge)
                                 {
                                     Destroy(instance);
                                     instance = Instantiate(gr.FreezePulse);
                                     instance.transform.position = death.gameObject.transform.position;
-                                    Debug.Log("freeze pulse!");
                                 }
                                 else if(iCollisions.size == Collisions.Size.Large)
                                 {
                                     Destroy(instance);
-                                    Debug.Log("freeze null!");
                                 }
                             }
                         }
@@ -1135,8 +1143,9 @@ public class Systems : MonoBehaviour
             Text pointsText = points.GetComponent<Text>();
             points.transform.position = death.gameObject.transform.position;  //position points message where the thing that was destroyed died
             pointsValue = death.points;
-            if(death.GetComponent<HasBounty>() != null)
+            if(death.GetComponent<HasBounty>() != null || (death.GetComponent<Ailments>() != null && death.GetComponent<Ailments>().isFrozenByBountyHunter))
             {
+                Debug.Log("bounty: reward points");
                 pointsValue *= 3;
                 pointsText.fill = new UnityEngine.Color(1, 0.65f, 0);
             }
