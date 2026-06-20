@@ -5,6 +5,8 @@ using UnityEngine;
 public class GlobalState : MonoBehaviour
 {  //defines data that should persist between scene changes. Unlike GlobalReferences, whose fields remain constant, GlobalState's fields change at runtime. This too requires an object instance.
     public bool isFirstTimePlayer;  //this is only true for the very first time you open this app. (It is used to force people to read the tutorial)
+    public string gameBLocalizedPriceString;
+    public string gameCLocalizedPriceString;
     public bool hasUnlockedGameB;
     public bool hasUnlockedGameC;
     public Sgs.GameModes gameMode;  //starts off on game mode a when first downloaded, but as you unlock the other game mode(s), this will change at runtime to which one you left off playing based on what you choose from the home menu, and persist after closing app

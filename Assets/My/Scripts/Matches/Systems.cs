@@ -423,10 +423,14 @@ public class Systems : MonoBehaviour
                 spawn.GetComponent<Kinematics>().direction = sDirection;
             }
 
-            //potentially add a powerup to be dropped when the enemy is defeated
+            //potentially add a powerup to be dropped when the enemy is defeated. Also, make invasion fighters and frazpow missiles start slower, so there are fewer head-first collisions from fast objects coming from offscreen
             Identification sIdentification = spawn.GetComponent<Identification>();
             if(sIdentification != null)
             {
+                if(sIdentification.name == Identification.Name.FrazpowMissile || sIdentification.name == Identification.Name.InvasionFighter)
+                {
+                    spawn.AddComponent<StartSlowly>();
+                }
 
                 //define the odds for the payload lottery
                 string[] lottery = new string[12];
@@ -674,6 +678,7 @@ public class Systems : MonoBehaviour
                                             }
                                         }
                                     }
+//left off: I am almost positive this is the only function that could be responsible for allowing you to instantly collect space squid's payload if you collide with him while already frozen. This assumes that receive.temporaryImmunityCounter disables you from recieving powerups too, which I think is the case though not 100% sure. If that is true though, I believe CollisionSystem() ignores poison collisions if the object in question is already poisoned, which explains why you can ignore colliding with a space squid if already poisoned, since that's the only effect it delivers.
                                     fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDurationLong; //set a cooldown so you don't just get hit by the exact same thing next frame
                                     return true;
                                 }
@@ -712,34 +717,41 @@ public class Systems : MonoBehaviour
                                 { //related to the logic above. You still want to destroy force fields even if a strongly defended object collides with a weak attack.
                                     ConsiderForceField();
                                 }
-                                if (fAilments != null && fAilments.poisonCounter <= 0 && eCollisions.deliver.isPoison && !fCollisions.receive.isPoisonImmune)
+                                if (fAilments != null && eCollisions.deliver.isPoison && !fCollisions.receive.isPoisonImmune)
                                 {  //try to poison a target. It won't work if the target is immune or already poisoned.
-                                    if (ConsiderForceField())
-                                    {
-                                        //if there was a force field, do nothing except what is defined in ConsiderForceField()
-                                        GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
-                                        poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
-                                        poisonAura.transform.localPosition = new Vector2(0, 0);
-                                        fAilments.poisonCounter = Mathf.RoundToInt(fAilments.poisonDuration * 1.5f); //make the poison last 1.5 times as long, and delete the force field elsewhere once the extra time has run out.
+                                    if(fAilments.poisonCounter <= 0)
+                                    { //if this has not already been poisoned, attempt to deliver a negative response
+                                        if (ConsiderForceField())
+                                        {
+                                            //if there was a force field, do nothing except what is defined in ConsiderForceField()
+                                            GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
+                                            poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
+                                            poisonAura.transform.localPosition = new Vector2(0, 0);
+                                            fAilments.poisonCounter = Mathf.RoundToInt(fAilments.poisonDuration * 1.5f); //make the poison last 1.5 times as long, and delete the force field elsewhere once the extra time has run out.
+                                        }
+                                        else
+                                        { //else, perform the usual consequence for poison attacks
+                                            GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
+                                            poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
+                                            poisonAura.transform.localPosition = new Vector2(0, 0);
+                                            fAilments.poisonCounter = fAilments.poisonDuration;
+                                        }
+                                        if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
+                                        { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
+                                            fAilments.retainBountyWithPoison = true;
+                                        }
+                                        if(f.GetComponent<PowerupsApplied>() != null)
+                                        {
+                                            PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
+                                            if(fPowerupsApplied.jetPowerupCounter > 0)
+                                            {
+                                                fPowerupsApplied.jetPowerupCounter = 0;
+                                            }
+                                        }
                                     }
                                     else
-                                    { //else, perform the usual consequence for poison attacks
-                                        GameObject poisonAura = Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
-                                        poisonAura.transform.parent = fAilments.transform;  //attach that poison aura's position to that of the target
-                                        poisonAura.transform.localPosition = new Vector2(0, 0);
-                                        fAilments.poisonCounter = fAilments.poisonDuration;
-                                    }
-                                    if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
-                                    { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
-                                        fAilments.retainBountyWithPoison = true;
-                                    }
-                                    if(f.GetComponent<PowerupsApplied>() != null)
-                                    {
-                                        PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
-                                        if(fPowerupsApplied.jetPowerupCounter > 0)
-                                        {
-                                            fPowerupsApplied.jetPowerupCounter = 0;
-                                        }
+                                    { //if this has already been poisoned (countdown still active) and it gets poisoned again, the usual "negative effect" should not happen, but there should still be a cooldown. This prevents the bug where if you collide with a space squid while already being poisoned, there is no cooldown, and you can collect the powerup it drops immediately, resulting in a strategy of running into a space squid to heal yourself, which of course is crappy game design.
+                                        fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDurationLong;
                                     }
                                 }
                                 if (eCollisions.deliver.isFreeze && !fCollisions.receive.isFreezeImmune)
@@ -768,7 +780,6 @@ public class Systems : MonoBehaviour
                                                 if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
                                                 {
                                                     fAilments.isFrozenByBountyHunter = true;
-                                                    Debug.Log("bounty: remember frozen by player");
                                                 }
                                             }
                                         }
@@ -943,6 +954,23 @@ public class Systems : MonoBehaviour
     {  //this essentially manages counters, as well as the consequence that unfolds after the timer finishes or is reset. (-1 means it is inactive, zero means your time has run out.)
         foreach (GameObject e in entities)
         { //NOTE: At least one timer (Copilot class) is handled in the CopilotSystem. Inconsistent design, but can improve on next game. Necessary because the timer only runs under certain circumstances, as opposed to these, which basically just run whenever they are not at zero
+            if(e.GetComponent<StartSlowly>() != null)
+            {
+                StartSlowly ss = e.GetComponent<StartSlowly>();
+                if(ss.slowCounter == 1)
+                { //end timer
+                    Kinematics eKinematics = e.GetComponent<Kinematics>();
+                    if(eKinematics != null)
+                    { //return speed to normal
+                        eKinematics.speed = ss.rememberedSpeed;
+                        Destroy(ss);
+                    }
+                }
+                if(ss.slowCounter > 0)
+                {
+                    ss.slowCounter--;
+                }
+            }
             if(e.GetComponent<Collisions>() != null && e.GetComponent<Collisions>().receive != null)
             { //handle collision cooldown timer. It will be reset in the collisions system
                 Collisions.Receive eReceive = e.GetComponent<Collisions>().receive;
@@ -991,7 +1019,6 @@ public class Systems : MonoBehaviour
                 if(eAilments.freezeCounter == 0)
                 {
                     eAilments.isFrozenByBountyHunter = false;
-                    Debug.Log("bounty: remove by timer running out");
                 }
                 if (eAilments.poisonCounter == 0 || eAilments.lifespan == 0)
                 {
@@ -1112,10 +1139,12 @@ public class Systems : MonoBehaviour
                         else if (i == 1)
                         { //i1 is asteroid/comet child
                             directionShift = .5f;
+                            //new: directionShift = Utilities.Math.WrapAngle(directionShift + .5f);
                         }
                         else if (i == 2)
                         { //i2 is asteroid/comet child as well
                             directionShift = -.5f;
+                            //new: directionShift = Utilities.Math.WrapAngle(directionShift - .5f);
                         }
                         else if (i == 3)
                         { //i3 is powerup
@@ -1132,8 +1161,8 @@ public class Systems : MonoBehaviour
                     {
                         Debug.LogWarning("Jim. No collision cpnt?");
                     }
-                    i++;
                 }
+                i++;
             }
         }
         void PrintPoints(Death death)
@@ -1145,7 +1174,6 @@ public class Systems : MonoBehaviour
             pointsValue = death.points;
             if(death.GetComponent<HasBounty>() != null || (death.GetComponent<Ailments>() != null && death.GetComponent<Ailments>().isFrozenByBountyHunter))
             {
-                Debug.Log("bounty: reward points");
                 pointsValue *= 3;
                 pointsText.fill = new UnityEngine.Color(1, 0.65f, 0);
             }
@@ -1389,13 +1417,93 @@ public class Systems : MonoBehaviour
         {  //takes a char from message field, and maps it to the corresponding sprite
             foreach (Sprite sprite in text.letters)
             {
-                if(letter == '/' && sprite.name == "slash")
-                { //fixes a bug where you aren't allowed to name your sprite for the forward slash character "/" in the sprite editor
-                    return sprite;
-                }
-                if (sprite.name[0] == letter)
+                if (sprite.name.Length == 1 && sprite.name[0] == letter)
                 {
                     return sprite;
+                }
+                else
+                {
+/*
+    € Euro sign
+    £ Pound sterling sign
+    ¥ Yen (or Yuan) sign
+    ₹ Indian rupee sign
+    ₩ South Korean won sign
+    ₽ Russian ruble sign
+    ₺ Turkish lira sign
+    ₫ Vietnamese đồng sign
+    ₴ Ukrainian hryvnia sign
+    ¢ Cent sign
+    ₦ Nigerian naira sign
+    ₱ Philippine peso sign
+    ₪ Israeli new shekel sign
+    ł Latin small letter L with stroke (used in "zł", the abbreviation for the Polish złoty)
+*/
+
+                    if(letter == '/' && sprite.name == "slash")
+                    { //fixes a bug where you aren't allowed to name your sprite for the forward slash character "/" in the sprite editor
+                        return sprite;
+                    }
+                    else if(letter == '/' && sprite.name == "slash")
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '€' && sprite.name == "Euro")
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '£' && sprite.name == "Pound")
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '¥' && sprite.name == "Yen") 
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₹' && sprite.name == "Rupee") //Indian
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₩' && sprite.name == "Won") //South Korean
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₽' && sprite.name == "Ruble") //Russian
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₺' && sprite.name == "Lira") //Turkish
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₫' && sprite.name == "Dong") //Vietnamese
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₴' && sprite.name == "Hryvnia") //Ukranian
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '¢' && sprite.name == "Cent") 
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₦' && sprite.name == "Naira") //Nigerian
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₱' && sprite.name == "Peso") //(Phillipine)
+                    {
+                        return sprite;
+                    }
+                    else if(letter == '₪' && sprite.name == "Shekel") //Israeli
+                    {
+                        return sprite;
+                    }
+                    else if(letter == 'ł' && sprite.name == "LatinL") //Polish Złoty
+                    {
+                        return sprite;
+                    }
                 }
             }
             Debug.LogWarning("Jim. Should never return null");

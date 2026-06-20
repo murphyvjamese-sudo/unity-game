@@ -25,7 +25,8 @@ public class SpecialActions : MonoBehaviour
     }
     void Awake()
     {
-        reloadCounter = 0;
+        //reloadCounter = 0; //OLD WAY: player and other enemies can perform their special action immediately
+        reloadCounter = Utilities.MapReloadSpeed(this) - 1; //player and other enemies can't perform their special action immediately. They have to reload first. (The -1 is because if you set it to reloadCounter == reloadSpeed, the system will use that condition to trigger a firing of the special action)
         multiShotSpeed = 3;
     }
 }

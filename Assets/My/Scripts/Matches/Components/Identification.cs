@@ -88,6 +88,7 @@ public class Identification : MonoBehaviour
                     if (pSpecialActions != null)
                     {
                         pSpecialActions.reloadSpeed = SpecialActions.ReloadSpeed.Fast;
+                        pSpecialActions.reloadCounter = Utilities.MapReloadSpeed(pSpecialActions) - 1; //this is identical in function to what is seen in SpecialActions.Awake(). Without this, the player's counter will start the game with a long duration, reach the short duration, and then fire without you pressing a button. This synchronizes things properly.
                     }
                 }
                 else if (upgrade == GlobalState.PlayerConfiguration.ShipUpgrade.Speed)

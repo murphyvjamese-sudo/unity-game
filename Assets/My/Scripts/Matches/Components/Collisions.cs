@@ -68,12 +68,16 @@ public class Collisions : MonoBehaviour
         rememberedOriginalReceive = receive;
         rememberedOriginalDeliver = deliver;
 
-        DeepCopyWithFrozenModifications();
+        if(!receive.isFreezeImmune)
+        { //if susceptible to being frozen, prepare a deep copy of an alternate collider object that this object will use when frozen
+            DeepCopyWithFrozenModifications();
+        }
     }
     public void SwapToFrozenCollider()
     {
         deliver = frozenDeliver;
         receive = frozenReceive;
+        receive.temporaryImmunityCounter = receive.temporaryImmunityDurationLong;
     }
     public void ReturnToNormalCollider()
     {

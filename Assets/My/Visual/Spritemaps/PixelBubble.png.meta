@@ -140,7 +140,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -162,7 +162,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -184,7 +184,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -206,7 +206,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 24
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -228,7 +228,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 98
+        y: 123
         width: 6
         height: 12
       alignment: 0
@@ -250,7 +250,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 39
-        y: 98
+        y: 123
         width: 6
         height: 12
       alignment: 0
@@ -272,7 +272,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 46
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -294,7 +294,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 54
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -316,7 +316,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 62
-        y: 98
+        y: 123
         width: 6
         height: 12
       alignment: 0
@@ -338,7 +338,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 98
+        y: 123
         width: 8
         height: 12
       alignment: 0
@@ -360,7 +360,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 86
+        y: 111
         width: 6
         height: 12
       alignment: 0
@@ -382,7 +382,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 86
+        y: 111
         width: 6
         height: 12
       alignment: 0
@@ -404,7 +404,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 13
-        y: 86
+        y: 111
         width: 8
         height: 12
       alignment: 0
@@ -426,7 +426,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 86
+        y: 111
         width: 8
         height: 12
       alignment: 0
@@ -448,7 +448,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 29
-        y: 86
+        y: 111
         width: 8
         height: 12
       alignment: 0
@@ -470,7 +470,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 38
-        y: 86
+        y: 111
         width: 6
         height: 12
       alignment: 0
@@ -492,7 +492,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 86
+        y: 111
         width: 8
         height: 12
       alignment: 0
@@ -514,7 +514,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 54
-        y: 86
+        y: 111
         width: 6
         height: 12
       alignment: 0
@@ -536,7 +536,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 61
-        y: 86
+        y: 111
         width: 6
         height: 12
       alignment: 0
@@ -558,7 +558,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 86
+        y: 111
         width: 8
         height: 12
       alignment: 0
@@ -580,7 +580,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -602,7 +602,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -624,7 +624,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 74
+        y: 99
         width: 10
         height: 12
       alignment: 0
@@ -646,7 +646,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 26
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -668,7 +668,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 35
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -690,7 +690,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 44
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -712,7 +712,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 53
-        y: 74
+        y: 99
         width: 8
         height: 12
       alignment: 0
@@ -734,7 +734,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 61
-        y: 74
+        y: 99
         width: 6
         height: 12
       alignment: 0
@@ -756,7 +756,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 74
+        y: 99
         width: 6
         height: 12
       alignment: 0
@@ -778,7 +778,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 62
+        y: 87
         width: 8
         height: 12
       alignment: 0
@@ -800,7 +800,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -822,7 +822,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -844,7 +844,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 22
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -866,7 +866,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 29
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -888,7 +888,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 36
-        y: 62
+        y: 87
         width: 4
         height: 12
       alignment: 0
@@ -910,7 +910,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 41
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -932,7 +932,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 47
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -954,7 +954,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 53
-        y: 62
+        y: 87
         width: 4
         height: 12
       alignment: 0
@@ -976,7 +976,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 58
-        y: 62
+        y: 87
         width: 8
         height: 12
       alignment: 0
@@ -998,7 +998,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 66
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -1020,7 +1020,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 73
-        y: 62
+        y: 87
         width: 6
         height: 12
       alignment: 0
@@ -1042,7 +1042,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1064,7 +1064,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 50
+        y: 75
         width: 8
         height: 12
       alignment: 0
@@ -1086,7 +1086,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1108,7 +1108,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 23
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1130,7 +1130,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 30
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1152,7 +1152,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 37
-        y: 50
+        y: 75
         width: 8
         height: 12
       alignment: 0
@@ -1174,7 +1174,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 45
-        y: 50
+        y: 75
         width: 8
         height: 12
       alignment: 0
@@ -1196,7 +1196,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 53
-        y: 50
+        y: 75
         width: 8
         height: 12
       alignment: 0
@@ -1218,7 +1218,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 61
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1240,7 +1240,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 50
+        y: 75
         width: 6
         height: 12
       alignment: 0
@@ -1262,7 +1262,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 38
+        y: 63
         width: 6
         height: 12
       alignment: 0
@@ -1284,7 +1284,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1306,7 +1306,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 15
-        y: 38
+        y: 63
         width: 6
         height: 12
       alignment: 0
@@ -1328,7 +1328,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 38
+        y: 63
         width: 6
         height: 12
       alignment: 0
@@ -1350,7 +1350,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 28
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1372,7 +1372,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 36
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1394,7 +1394,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 44
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1416,7 +1416,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 52
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1438,7 +1438,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 60
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1460,7 +1460,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 68
-        y: 38
+        y: 63
         width: 8
         height: 12
       alignment: 0
@@ -1482,7 +1482,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1504,7 +1504,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 26
+        y: 51
         width: 4
         height: 12
       alignment: 0
@@ -1526,7 +1526,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 13
-        y: 26
+        y: 51
         width: 6
         height: 12
       alignment: 0
@@ -1548,7 +1548,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 19
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1570,7 +1570,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 27
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1592,7 +1592,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 35
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1614,7 +1614,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 43
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1636,7 +1636,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 51
-        y: 26
+        y: 51
         width: 4
         height: 12
       alignment: 0
@@ -1658,7 +1658,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 55
-        y: 26
+        y: 51
         width: 4
         height: 12
       alignment: 0
@@ -1680,7 +1680,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 60
-        y: 26
+        y: 51
         width: 4
         height: 12
       alignment: 0
@@ -1702,7 +1702,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 65
-        y: 26
+        y: 51
         width: 8
         height: 12
       alignment: 0
@@ -1724,7 +1724,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 14
+        y: 39
         width: 8
         height: 12
       alignment: 0
@@ -1746,7 +1746,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 14
+        y: 39
         width: 4
         height: 12
       alignment: 0
@@ -1768,7 +1768,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 13
-        y: 14
+        y: 39
         width: 8
         height: 12
       alignment: 0
@@ -1790,7 +1790,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 14
+        y: 39
         width: 4
         height: 12
       alignment: 0
@@ -1812,7 +1812,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 26
-        y: 14
+        y: 39
         width: 6
         height: 12
       alignment: 0
@@ -1834,7 +1834,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 14
+        y: 39
         width: 4
         height: 12
       alignment: 0
@@ -1856,7 +1856,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 36
-        y: 14
+        y: 39
         width: 4
         height: 12
       alignment: 0
@@ -1878,7 +1878,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 41
-        y: 14
+        y: 39
         width: 6
         height: 12
       alignment: 0
@@ -1900,7 +1900,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 47
-        y: 14
+        y: 39
         width: 6
         height: 12
       alignment: 0
@@ -1922,7 +1922,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 54
-        y: 14
+        y: 39
         width: 6
         height: 12
       alignment: 0
@@ -1944,7 +1944,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 60
-        y: 14
+        y: 39
         width: 8
         height: 12
       alignment: 0
@@ -1965,8 +1965,8 @@ TextureImporter:
       name: '@'
       rect:
         serializedVersion: 2
-        x: 69
-        y: 14
+        x: 68
+        y: 39
         width: 10
         height: 12
       alignment: 0
@@ -1988,7 +1988,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
+        y: 27
         width: 4
         height: 12
       alignment: 0
@@ -2010,7 +2010,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5
-        y: 2
+        y: 27
         width: 6
         height: 12
       alignment: 0
@@ -2032,7 +2032,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 11
-        y: 2
+        y: 27
         width: 4
         height: 12
       alignment: 0
@@ -2054,7 +2054,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 2
+        y: 27
         width: 8
         height: 12
       alignment: 0
@@ -2076,7 +2076,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 24
-        y: 2
+        y: 27
         width: 8
         height: 12
       alignment: 0
@@ -2098,7 +2098,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 2
+        y: 27
         width: 4
         height: 12
       alignment: 0
@@ -2120,7 +2120,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 37
-        y: 2
+        y: 27
         width: 6
         height: 12
       alignment: 0
@@ -2142,7 +2142,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 43
-        y: 2
+        y: 27
         width: 4
         height: 12
       alignment: 0
@@ -2164,7 +2164,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 47
-        y: 2
+        y: 27
         width: 6
         height: 12
       alignment: 0
@@ -2186,7 +2186,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 53
-        y: 2
+        y: 27
         width: 8
         height: 12
       alignment: 0
@@ -2199,6 +2199,314 @@ TextureImporter:
       bones: []
       spriteID: 8ea8e4ec5ab8f49ef9d221878c453999
       internalID: -719926698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Euro
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 27
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daa58147b31d3428e84f887bb8daee56
+      internalID: -1743410689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pound
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 27
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91933785e4b22480f82945ed810cd485
+      internalID: -157261544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Peso
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d52135a98904b42868b8379a985eb7bf
+      internalID: 326747942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shekel
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ade44ce399aa48fd8c91bca0f1060e0
+      internalID: 1494889634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LatinL
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 15
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68892cc9cb0204b80b03eced9fa6fbc6
+      internalID: -1447332149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Naira
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bb1411d67af9471aaf513e239436a46
+      internalID: -540970236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cent
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 15
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da5b4773b83164dd0a11ad5601e82d8e
+      internalID: 1211152930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hryvnia
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a34df36a565a54e3c8845bc07f8e49eb
+      internalID: -1294308340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dong
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 15
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 345ced07dac424c549dd85cb080320aa
+      internalID: -625519394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Yen
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 375f145b3ab5f48f0ac3e8dab849e653
+      internalID: -1486876289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rupee
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3428af57023684ccab86025596ac5e77
+      internalID: 1132464964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Won
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 3
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2550d939757014ceeba4c05adf246492
+      internalID: -941260986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ruble
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 3
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d170d6050f5ea4f80bd38e0fbd4815b8
+      internalID: 1630362074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lira
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 3
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c17fa07ce58ed4918b12ddd734e5db46
+      internalID: 1607731657
       vertices: []
       indices: 
       edges: []
@@ -2251,28 +2559,42 @@ TextureImporter:
       A: -1852999680
       B: -1295611424
       C: 49416390
+      Cent: 1211152930
       D: 1457608321
+      Dong: -625519394
       E: 785172588
+      Euro: -1743410689
       F: 341064344
       G: 314932014
       H: -829585450
+      Hryvnia: -1294308340
       I: 1717200626
       J: -201838379
       K: 1662696579
       L: -1046691926
+      LatinL: -1447332149
+      Lira: 1607731657
       M: -882059532
       N: -1054690711
+      Naira: -540970236
       O: 908828071
       P: 1827846843
+      Peso: 326747942
+      Pound: -157261544
       Q: -227871680
       R: -1131363182
+      Ruble: 1630362074
+      Rupee: 1132464964
       S: 1411719682
+      Shekel: 1494889634
       T: -1133384971
       U: -929297713
       V: 563640521
       W: 1029482357
+      Won: -941260986
       X: -1867352279
       Y: -1827032443
+      Yen: -1486876289
       Z: -1463867516
       '[': -2015893915
       \: 1117040586

@@ -177,6 +177,20 @@ MonoBehaviour:
   - {fileID: -1572335244, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
   - {fileID: -347924717, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
   - {fileID: -719926698, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -1743410689, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -1486876289, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 1132464964, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 326747942, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -625519394, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 1607731657, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -1447332149, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 1494889634, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -941260986, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 1630362074, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -540970236, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: 1211152930, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -1294308340, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
+  - {fileID: -157261544, guid: 15794e1cb193c4fdeb4ceec9c053ee24, type: 3}
   pixelBubbleMaterial: {fileID: 2100000, guid: 04479429f8a874439a3872bdcbbbaa95, type: 2}
   Text: {fileID: 3657650933984160713, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
   Button: {fileID: 6887461214481119213, guid: d02656cba64e04f068655ad7183bf402, type: 3}
@@ -197,6 +211,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstTimePlayer: 0
+  gameBLocalizedPriceString: 
+  gameCLocalizedPriceString: 
   hasUnlockedGameB: 0
   hasUnlockedGameC: 0
   gameMode: 0

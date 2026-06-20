@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6307480243456443763, guid: 86dd4cee4005b418bad82082e06e14c6, type: 3}
       propertyPath: size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6307480243456443763, guid: 86dd4cee4005b418bad82082e06e14c6, type: 3}
       propertyPath: receive.defense
@@ -105,5 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76da85d34427140579c569a2cab4704f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDiscoveredByNavigator: 0
   name: 0
   value: 0

@@ -48,8 +48,8 @@ MonoBehaviour:
   isCameraRelative: 0
   isInvertedColor: 0
   fill: {r: 0, g: 0, b: 0, a: 0}
-  stroke: {r: 0, g: 0, b: 0, a: 0}
-  message: 
+  stroke: {r: 1, g: 1, b: 1, a: 1}
+  message: test
   dataBind: 0
   material: {fileID: 2100000, guid: 04479429f8a874439a3872bdcbbbaa95, type: 2}
   xPreCamera: 0

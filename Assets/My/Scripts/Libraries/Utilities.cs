@@ -171,7 +171,6 @@ public static class Utilities
             rAilments.poisonCounter = -1;  //-1 ends the timer without causing the bad effect to happen
             rAilments.retainBountyWithPoison = false; //might be unnecessary, but I don't want an object to get healed from a bounty hunter player's poison, then get poisoned from something else and die rewarding the bounty hunter.
             rAilments.isFrozenByBountyHunter = false; //same idea as retainBountyWithPoison. No unfair points for bounty hunter
-            Debug.Log("bounty: remove by heal");
         }
 
         //remove any visual effects:
@@ -273,7 +272,8 @@ public static class Utilities
                 r = .4f * enemyCoefficient;
                 break;
             case Kinematics.Acceleration.SlowPlayer:
-                r = .8f * playerCoefficient;
+                //originally: r = .8f * playerCoefficient;
+                r = .85f * playerCoefficient;
                 break;
         }
         return r / 20;
@@ -288,13 +288,13 @@ public static class Utilities
                 r = 3;
                 break;
             case Collisions.Size.Medium:
-                r = 4;
+                r = 5; //previously 4
                 break;
             case Collisions.Size.Large:
-                r = 10;
+                r = 8; //previously 10. This is just enough for a jet poweruped terriloomer to still spawn an invasion fighter without immediately crashing into it, so long as Size.Medium remains 6
                 break;
             case Collisions.Size.ExtraLarge:
-                r = 20;
+                r = 18; //previously 20
                 break;
         }
         return r;
@@ -376,6 +376,7 @@ public static class Utilities
         SpecialActions eSA = e.GetComponent<SpecialActions>();
         Kinematics eKinematics = e.GetComponent<Kinematics>();
         Collisions eCollisions = e.GetComponent<Collisions>();
+        Ailments eAilments = e.GetComponent<Ailments>();
         Intelligence eIntelligence = e.GetComponent<Intelligence>();
         GameObject selectedSpawn;
         if (eSA.isPointingToOtherSpawn)
@@ -395,13 +396,13 @@ public static class Utilities
         if(e.GetComponent<Copilot>() != null && e.GetComponent<Copilot>().copilot == GlobalState.PlayerConfiguration.Copilot.BountyHunter && selectedSpawn.GetComponent<Projectiles>())
         { //if this is the player, and it is shooting a projectile, make sure that projectile is able to communicate that it is from the player, so that a bounty hunter copilot can get it's reward.
             selectedSpawn.GetComponent<Projectiles>().isShotFromPlayer = true;
-            Debug.Log("bounty: is shot from player");
         }
         if (selectedSpawn != null && selectedSpawn.GetComponent<Kinematics>() != null && selectedSpawn.GetComponent<Collisions>() && eKinematics != null)
         {
             Kinematics selectedSpawnKinematics = selectedSpawn.GetComponent<Kinematics>();
             Collisions selectedSpawnCollisions = selectedSpawn.GetComponent<Collisions>();
             Intelligence selectedSpawnIntelligence = selectedSpawn.GetComponent<Intelligence>();
+            Ailments selectedSpawnAilments = selectedSpawn.GetComponent<Ailments>();
             Identification selectedSpawnIdentification = selectedSpawn.GetComponent<Identification>();
             float collisionAvoidance = MapSize(selectedSpawnCollisions) + MapSize(eCollisions) + 1; //spawn the child ahead of whatever direction the parent is facing by a little more than the sum of their two sizes to avoid immediate collisions.
             if (collisionAvoidance > 15)
@@ -413,6 +414,20 @@ public static class Utilities
             if(selectedSpawnIntelligence != null && eIntelligence != null)
             {
                 selectedSpawnIntelligence.team = eIntelligence.team;
+            }
+            if(selectedSpawnAilments != null && eAilments != null)
+            {
+                if(eAilments.poisonCounter > 0)
+                { //if the spawner is poisoned, its children should also be spawned with an infection (think terriloomer)
+                    selectedSpawnAilments.poisonCounter = selectedSpawnAilments.poisonDuration;
+                    GlobalReferences gr = GameObject.FindObjectOfType<GlobalReferences>();
+                    if(gr != null)
+                    {
+                        GameObject poisonAura = GameObject.Instantiate(gr.PoisonAura);  //create a poison aura to surround the target visually
+                        poisonAura.transform.parent = selectedSpawnAilments.transform;  //attach that poison aura's position to that of the target
+                        poisonAura.transform.localPosition = new Vector2(0, 0);
+                    }
+                }
             }
             if (selectedSpawnIdentification != null && selectedSpawnIdentification.name == Identification.Name.FreezePulse || selectedSpawnIdentification.name == Identification.Name.ConvertivePulse)
             {  //if this is a freeze pulse (or perhaps include other specific types of game objects?)

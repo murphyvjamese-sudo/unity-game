@@ -39,7 +39,8 @@ public static class Sgs
         AdvertiseGameC = 7,
         Tutorial = 8,
         Leaderboards = 9,
-        Loading = 10
+        Loading = 10,
+        Extras = 11
     }
     public enum GameModes
     {
@@ -129,7 +130,7 @@ public static class Sgs
         }
         void CreateLoadingPage()
         {
-            Debug.Log("CreateLoadingPage()");
+            //De\bug.Log("CreateLoadingPage()");
             MakeText(-30, 20, "Loading...", TextColors.points);
         }
         void CreateHomePage()
@@ -157,7 +158,7 @@ public static class Sgs
 
             GameObject.Instantiate(gr.Title, new Vector3(0, 60, 0), Quaternion.identity);
 
-            offsetY = -10;
+            offsetY = -30;
             MakeButton(-70, offsetY + 20, "Tutorial", SgsButtonHandler.Tutorial, TextColors.button);
             if(gs.hasUnlockedGameC)
             {
@@ -165,14 +166,14 @@ public static class Sgs
                 MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
                 MakeButton(-70, offsetY - 40, "Game C", SgsButtonHandler.PlayGameC, TextColors.button);
                 MakeButton(-70, offsetY - 60, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
-                MakeButton(-70, offsetY - 80, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
+                MakeButton(-70, offsetY - 80, "Extras", SgsButtonHandler.Extras, TextColors.button);
             }
             else if(gs.hasUnlockedGameB)
             {
                 MakeButton(-70, offsetY, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
                 MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.PlayGameB, TextColors.button);
                 MakeButton(-70, offsetY - 40, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
-                MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
+                MakeButton(-70, offsetY - 60, "Extras", SgsButtonHandler.Extras, TextColors.button);
             }
             else
             {  //unpaid player. base game
@@ -181,14 +182,14 @@ public static class Sgs
                     MakeText(-70, offsetY, "Game A", TextColors.lockedButton);
                     MakeText(-70, offsetY - 20, "Game B", TextColors.lockedButton);
                     MakeText(-70, offsetY - 40, "Leaderboards", TextColors.lockedButton);
-                    MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
+                    MakeButton(-70, offsetY - 60, "Extras", SgsButtonHandler.Extras, TextColors.button);
                 }
                 else
                 {
                     MakeButton(-70, offsetY, "Game A", SgsButtonHandler.PlayGameA, TextColors.button);
                     MakeButton(-70, offsetY - 20, "Game B", SgsButtonHandler.UnlockGameB, TextColors.lockedButton);
                     MakeButton(-70, offsetY - 40, "Leaderboards", SgsButtonHandler.Leaderboards, TextColors.button);
-                    MakeButton(-70, offsetY - 60, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
+                    MakeButton(-70, offsetY - 60, "Extras", SgsButtonHandler.Extras, TextColors.button);
                 }
             }
         }
@@ -202,6 +203,7 @@ public static class Sgs
             MakeText(-70, 10, "- Four new copilots!", TextColors.information);
             MakeText(-70, 0, "- Access Game B", TextColors.information); //note that I might not actually have something like this...
             MakeText(-57, -10, "Leaderboard!", TextColors.information); //note that I might not actually have something like this...
+            MakeText(-90, -20, "Price: " + gs.gameBLocalizedPriceString, TextColors.information);
             MakeButton(-80, -50, "BUY NOW!", SgsButtonHandler.BuyGameB, TextColors.button);
             MakeButton(10, -50, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
         }
@@ -216,6 +218,7 @@ public static class Sgs
             MakeText(-70, 0, "- Two new blasters!", TextColors.information);  //the bomb that you drop behind you and it explodes shortly thereafter. Also, a tractor beam that works just like the UFO (you can use it to collect powerups, or siphon in enemies then convert them)
             MakeText(-70, -10, "- One new copilot!", TextColors.information);  //come up with something
             MakeText(-70, -20, "- Access Game C Leaderboard!", TextColors.information);
+            MakeText(-90, -30, "Price: " + gs.gameCLocalizedPriceString, TextColors.information);
             MakeButton(-80, -50, "BUY NOW!", SgsButtonHandler.BuyGameC, TextColors.button);
             MakeButton(10, -50, "Return Home", SgsButtonHandler.ReturnHome, TextColors.button);
         }
@@ -313,6 +316,13 @@ public static class Sgs
             {
                 MakeText(-90, 50, "Connect to Internet", TextColors.information);
             }
+        }
+        void CreateExtrasPage()
+        {
+            MakeText(-20, 70, "Extras", TextColors.header);
+            MakeButton(-95, 20, "App Support / Privacy Policy", SgsButtonHandler.AppSupportAndPrivacyPolicy, TextColors.button);
+            MakeButton(-60, -30, "Restore Purchases", SgsButtonHandler.RestorePurchases, TextColors.button);
+            IncludeReturnHomeButton();
         }
         void CreateChooseAndUpgradeShipPages()
         {
@@ -442,6 +452,9 @@ public static class Sgs
                     break;
                 case Pages.AdvertiseGameC:
                     CreateAdvertiseGameCPage();
+                    break;
+                case Pages.Extras:
+                    CreateExtrasPage();
                     break;
                 case Pages.ShipUpgrade:
                     CreateChooseAndUpgradeShipPages();
@@ -585,7 +598,8 @@ public static class Sgs
             */
                 if(iaps != null)
                 {
-                    iaps.RequestPlatformBillingUI("GameB");  //brings up the purchasing UI for app store, google play, or fake store, depending on which platform the game is running. (Inside the editor triggers the fake store)           
+                    Debug.LogWarning("IAPS: BuyGameB button clicked");
+                    iaps.RequestPlatformBillingUI("com.neatstreet.cosmicchase.gameb");  //brings up the purchasing UI for app store, google play, or fake store, depending on which platform the game is running. (Inside the editor triggers the fake store)           
                 }
 
                 break;
@@ -635,11 +649,17 @@ public static class Sgs
             case SgsButtonHandler.ReturnHome:
                 HandleReturnHomePage();
                 break;
+            case SgsButtonHandler.Extras:
+                NewMenuPage(Pages.Extras);
+                break;
             case SgsButtonHandler.RestorePurchases: //this button is mandatory for apple review process. Maybe remove / declutter for Google Play Store?
                 if(iaps != null)
                 {
                     iaps.RestorePurchases();
                 }
+                break;
+            case SgsButtonHandler.AppSupportAndPrivacyPolicy:
+                Application.OpenURL("https://murphyvjamese-sudo.github.io/support-website/");
                 break;
             case SgsButtonHandler.PlayAgain:
                 StartMatch();  //this only works if you don't change the game state from previous round, which I believe won't be a problem.
@@ -654,6 +674,8 @@ public static class Sgs
     }
     public enum SgsButtonHandler
     {  //I will try to organize each button into groupings of the same menus via indentation of this enum body
+        AppSupportAndPrivacyPolicy = 28,
+        Extras = 27,
         RestorePurchases = 26,
         Loading = 25,
         Leaderboards = 24,
