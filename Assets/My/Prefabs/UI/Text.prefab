@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCameraRelative: 0
   isInvertedColor: 0
-  fill: {r: 0, g: 0, b: 0, a: 0}
+  fill: {r: 0, g: 0, b: 0, a: 1}
   stroke: {r: 1, g: 1, b: 1, a: 1}
   message: test
   dataBind: 0

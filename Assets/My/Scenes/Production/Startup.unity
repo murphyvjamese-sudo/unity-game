@@ -352,6 +352,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Systems
       objectReference: {fileID: 0}
+    - target: {fileID: 3826876534219370071, guid: 34bddd3a90f874114a0f24c61e0df735, type: 3}
+      propertyPath: isAbleToHitQuasiNewPlayerButton
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7864608509174673418, guid: 34bddd3a90f874114a0f24c61e0df735, type: 3}
       propertyPath: m_RootOrder
       value: 2

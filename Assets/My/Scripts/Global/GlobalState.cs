@@ -5,6 +5,7 @@ using UnityEngine;
 public class GlobalState : MonoBehaviour
 {  //defines data that should persist between scene changes. Unlike GlobalReferences, whose fields remain constant, GlobalState's fields change at runtime. This too requires an object instance.
     public bool isFirstTimePlayer;  //this is only true for the very first time you open this app. (It is used to force people to read the tutorial)
+    public bool isRestoringPurchasesManually; //game will automatically try to restore purchases. Need a way to distinguish if the restore purchases call is automatic, or done manually. If automatic, don't generate a message saying no purchases to restore. If done manually, politely inform the user there are no purchases to restore.
     public string gameBLocalizedPriceString;
     public string gameCLocalizedPriceString;
     public bool hasUnlockedGameB;

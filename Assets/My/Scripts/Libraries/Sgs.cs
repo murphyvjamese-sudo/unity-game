@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Purchasing;
 using UnityEngine.TextCore.Text;
+using System;
 
 public static class Sgs
 {
@@ -40,7 +41,8 @@ public static class Sgs
         Tutorial = 8,
         Leaderboards = 9,
         Loading = 10,
-        Extras = 11
+        Extras = 11,
+        NoPurchasesToRestore = 12
     }
     public enum GameModes
     {
@@ -133,9 +135,19 @@ public static class Sgs
             //De\bug.Log("CreateLoadingPage()");
             MakeText(-30, 20, "Loading...", TextColors.points);
         }
+        void CreateNoPurchasesToRestorePage()
+        {
+            MakeText(-80, 20, "No purchases to restore.", TextColors.points);
+            IncludeReturnHomeButton();
+        }
         void CreateHomePage()
         {
             int offsetY = 0;
+            Debugging debugging = GameObject.FindObjectOfType<Debugging>();
+            if(debugging != null && debugging.isAbleToHitQuasiNewPlayerButton)
+            {
+                MakeButton(-70, offsetY + 10, "Quasi Reset", SgsButtonHandler.DebugButtonQuasiReset, TextColors.header); //this adds a button that allows you to reset locally stored purchases and hasCompletedTutorial, allowing you to test as a "quasi first time player," while still retaining high scores.
+            }
             bool IsPlayingThemeAlready()
             {
                 Noise[] noises = Utilities.Searches.FindByComponent<Noise>();
@@ -244,7 +256,7 @@ public static class Sgs
 
             MakeButton(-30, -60, "Got it!", SgsButtonHandler.PlayGameA, TextColors.button);
             PlayerPrefs.SetInt("HasCompletedTutorial", 1);
-
+            PlayerPrefs.Save();
         }
         async Task CreateLeaderboardsPage()
         {
@@ -438,6 +450,9 @@ public static class Sgs
                 case Pages.Loading:
                     CreateLoadingPage();
                     break;
+                case Pages.NoPurchasesToRestore:
+                    CreateNoPurchasesToRestorePage();
+                    break;
                 case Pages.Home:
                     CreateHomePage();
                     break;
@@ -551,6 +566,14 @@ public static class Sgs
                 //UNCOMMENT this once you are ready to implement game c: NewMenuPage(Pages.AdvertiseGameC);
             }
         }
+        void HandleQuasiReset()
+        {
+            Debug.LogWarning("BEFORE:\nHasCompletedTutorial: " + PlayerPrefs.GetInt("HasCompletedTutorial") + "\nGameB: " + SecurePlayerPrefs.GetInt("GameB"));
+            PlayerPrefs.SetInt("HasCompletedTutorial", 0);
+            SecurePlayerPrefs.SetInt("GameB", 0);
+            PlayerPrefs.Save();
+            Debug.LogWarning("AFTER:\nHasCompletedTutorial: " + PlayerPrefs.GetInt("HasCompletedTutorial") + "\nGameB: " + SecurePlayerPrefs.GetInt("GameB"));
+        }
 
         IAPs iaps = GameObject.FindFirstObjectByType<IAPs>();
         switch (sgs)
@@ -655,11 +678,15 @@ public static class Sgs
             case SgsButtonHandler.RestorePurchases: //this button is mandatory for apple review process. Maybe remove / declutter for Google Play Store?
                 if(iaps != null)
                 {
+                    gs.isRestoringPurchasesManually = true; //set to true so that if there is nothing to restore, it will politely redirect user to a menu page that says just that, with the option to return home. (As opposed to this check being run automatically at the start of the game, where this menu of course should not be generated.)
                     iaps.RestorePurchases();
                 }
                 break;
             case SgsButtonHandler.AppSupportAndPrivacyPolicy:
                 Application.OpenURL("https://murphyvjamese-sudo.github.io/support-website/");
+                break;
+            case SgsButtonHandler.DebugButtonQuasiReset:
+                HandleQuasiReset();
                 break;
             case SgsButtonHandler.PlayAgain:
                 StartMatch();  //this only works if you don't change the game state from previous round, which I believe won't be a problem.
@@ -674,6 +701,7 @@ public static class Sgs
     }
     public enum SgsButtonHandler
     {  //I will try to organize each button into groupings of the same menus via indentation of this enum body
+        DebugButtonQuasiReset = 29,
         AppSupportAndPrivacyPolicy = 28,
         Extras = 27,
         RestorePurchases = 26,

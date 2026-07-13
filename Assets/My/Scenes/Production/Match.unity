@@ -436,6 +436,18 @@ PrefabInstance:
       propertyPath: dataBind
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3740026764905139499, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -988,6 +1000,18 @@ PrefabInstance:
     - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
       propertyPath: dataBind
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432523651837494227, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
+      propertyPath: stroke.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3740026764905139499, guid: 2910102bd0561434a861e5c0aa804b6e, type: 3}
       propertyPath: m_RootOrder

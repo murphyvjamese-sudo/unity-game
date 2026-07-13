@@ -5,10 +5,11 @@ using UnityEngine;
 public class Debugging : MonoBehaviour
 {
     public bool isPlayerInvincible;  //make player invincible to damage, so you can debug a match without dying / ending the match
+    public bool isAbleToHitQuasiNewPlayerButton;
 
     void Awake()
     {
-
+        
     }
     void FixedUpdate()
     {

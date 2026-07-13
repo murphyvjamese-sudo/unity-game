@@ -90,7 +90,7 @@ public class Systems : MonoBehaviour
                 float size = 10;
                 if(target.GetComponent<Collisions>() != null)
                 { //establish how far above the enemy game object the star should be placed (higher for terriloomer than invasion fighter)
-                    size = Utilities.MapSize(target.GetComponent<Collisions>());
+                    size = Mathf.Sqrt(Utilities.MapSizeSq(target.GetComponent<Collisions>()));
                 }
                 bountyTarget.transform.parent = target.transform;
                 bountyTarget.transform.localPosition = new Vector2(bountyTarget.transform.position.x, bountyTarget.transform.position.y + size + 5);
@@ -637,39 +637,42 @@ public class Systems : MonoBehaviour
         }
         foreach (GameObject e in entities)
         {
-            if (e.GetComponent<Collisions>() != null)
+            Collisions eCollisions = e.GetComponent<Collisions>();
+            if (eCollisions != null)
             {
-                Collisions eCollisions = e.GetComponent<Collisions>();
                 foreach (GameObject f in entities)
                 {
-                    if (f != e && f.GetComponent<Collisions>() != null && f.GetComponent<Death>() != null)
+                    Collisions fCollisions = f.GetComponent<Collisions>();
+                    Death fDeath = f.GetComponent<Death>();
+                    if (f != e && fCollisions != null && fDeath != null)
                     {  //both objs have collisions cpnt, so you can check to see if they collide.
-                        Collisions fCollisions = f.GetComponent<Collisions>();
-                        Death fDeath = f.GetComponent<Death>();
                         Ailments fAilments = f.GetComponent<Ailments>();
                         Identification fIdentification = f.GetComponent<Identification>();
+                        Identification eIdentification = e.GetComponent<Identification>();
                         if (IsException(eCollisions, fCollisions))
                         {
                             continue;  //if there is an exception, ignore this collision btwn e and f
                         }
-                        if (Utilities.Math.Distance(e.transform.position.x, e.transform.position.y, f.transform.position.x, f.transform.position.y) <= Utilities.MapSize(eCollisions) + Utilities.MapSize(fCollisions))
+                        if (Utilities.Math.DistanceSq(e.transform.position.x, e.transform.position.y, f.transform.position.x, f.transform.position.y) <= Utilities.MapSizeSq(eCollisions) + Utilities.MapSizeSq(fCollisions))
                         {  //there is a collision
                            //sgs
                            bool ConsiderForceField()
                             { //you should call this before every negative collision scenario (poison, freeze, damage, conversion, etc) so that the force field will protect you instead of the usual effect taking place.
-                                if (f.GetComponent<PowerupsApplied>() != null && f.GetComponent<PowerupsApplied>().isForceFieldPoweruped)
+                                PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
+                                if (fPowerupsApplied != null && fPowerupsApplied.isForceFieldPoweruped)
                                 { //if there is a force field involved
-                                    if(!eCollisions.deliver.isConvertive && !eCollisions.deliver.isPoison)
+                                    if(eCollisions.deliver.damage != Collisions.Deliver.Damage.None || (!eCollisions.deliver.isConvertive && !eCollisions.deliver.isPoison))
                                     {
-                                        f.GetComponent<PowerupsApplied>().isForceFieldPoweruped = false; //remove the force field on a collisions logic level
+                                        fPowerupsApplied.isForceFieldPoweruped = false; //remove the force field on a collisions logic level
                                         foreach (Transform child in f.transform)
                                         { //iterate through all of f's children
-                                            if (child.gameObject.GetComponent<Identification>() != null && child.gameObject.GetComponent<Identification>().name == Identification.Name.ForceField)
+                                            Identification childIdentification = child.gameObject.GetComponent<Identification>();
+                                            if (childIdentification != null && childIdentification.name == Identification.Name.ForceField)
                                             { //remove force field visual
                                                 Destroy(child.gameObject);
-                                                if(f.GetComponent<Ailments>() != null)
+                                                Ailments fAilments = f.GetComponent<Ailments>();
+                                                if(fAilments != null)
                                                 {
-                                                    Ailments fAilments = f.GetComponent<Ailments>();
                                                     if(fAilments.poisonCounter > fAilments.poisonDuration)
                                                     { //handles minor bug where a poisoned force field gets destroyed, leaving the object that had the force field with an extended poisonCounter.
                                                         fAilments.poisonCounter = fAilments.poisonDuration;
@@ -685,9 +688,8 @@ public class Systems : MonoBehaviour
                                 fCollisions.receive.temporaryImmunityCounter = fCollisions.receive.temporaryImmunityDurationLong; //set a cooldown so you don't just get hit by the exact same thing next frame (must perform this inside and outside the above condition, to account for both function return paths)
                                 return false;
                             }
-                            if(e.GetComponent<Identification>() != null)
+                            if(eIdentification != null)
                             {
-                                Identification eIdentification = e.GetComponent<Identification>();
                                 if(eIdentification.name == Identification.Name.LaserBeam || eIdentification.name == Identification.Name.PlasmaCannon || eIdentification.name == Identification.Name.PoisonGlob)
                                 { //if this is a projectile (poison glob, plasma cannon, laser beam), it should destroy itself if it collides with an object that has defensive characteristics. This allows bullets to not get destroyed by other bullets or pulses, but will get destroyed by "solid" if you will, things they collide with, independent of physical damage values.
                                     if(fCollisions.receive != null && fCollisions.receive.defense != Collisions.Receive.Defense.Ignore)
@@ -696,8 +698,10 @@ public class Systems : MonoBehaviour
                                     }
                                 }
                             }
+                            Projectiles eProjectiles = e.GetComponent<Projectiles>();
                             if (fCollisions.receive.temporaryImmunityCounter == 0)
                             { //if there is no collision cooldown, consider all collision scenarios
+                                PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
                                 if(Utilities.MapDefense(fCollisions.receive.defense) <= Utilities.MapPhysicalAttack(eCollisions.deliver.damage)) //DEPRACATED: OLD CONDITION where I compared the couple values with direct logic. Not scalable when I realized I needed more values of defensive capability.(fCollisions.receive.defense != Collisions.Receive.Defense.Ignore && (eCollisions.deliver.damage == Collisions.Deliver.Damage.Strong || eCollisions.deliver.damage == Collisions.Deliver.Damage.Weak && fCollisions.receive.defense != Collisions.Receive.Defense.Strong))
                                 {  //if the defense is weaker than or equal to the attack, physical damage will occur
                                     if (ConsiderForceField())
@@ -706,9 +710,10 @@ public class Systems : MonoBehaviour
                                     }
                                     else
                                     { //else, perform the usual consequence for physical damage.
-                                        if(f.GetComponent<HasBounty>() != null && e.GetComponent<Projectiles>() == null || e.GetComponent<Projectiles>() != null && !e.GetComponent<Projectiles>().isShotFromPlayer)
+                                        HasBounty fHasBounty = f.GetComponent<HasBounty>();
+                                        if(fHasBounty != null && eProjectiles == null || eProjectiles != null && !eProjectiles.isShotFromPlayer)
                                         { //if this object has a bounty on its head, and something other than the player destroys it, remove the bounty so it won't grant extra points when DeathSystem() clears it out and rewards points accordingly
-                                            DestroyImmediate(f.GetComponent<HasBounty>());
+                                            DestroyImmediate(fHasBounty);
                                         }
                                         fDeath.isDeathFlagged = true;
                                     }
@@ -736,13 +741,12 @@ public class Systems : MonoBehaviour
                                             poisonAura.transform.localPosition = new Vector2(0, 0);
                                             fAilments.poisonCounter = fAilments.poisonDuration;
                                         }
-                                        if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
+                                        if(eProjectiles != null && eProjectiles.isShotFromPlayer)
                                         { //if the delivering collider is a poison projectile shot from the player, make sure that the poison remembers it was the player who shot it, in case of a bounty hunter reward
                                             fAilments.retainBountyWithPoison = true;
                                         }
-                                        if(f.GetComponent<PowerupsApplied>() != null)
+                                        if(fPowerupsApplied != null)
                                         {
-                                            PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
                                             if(fPowerupsApplied.jetPowerupCounter > 0)
                                             {
                                                 fPowerupsApplied.jetPowerupCounter = 0;
@@ -777,7 +781,7 @@ public class Systems : MonoBehaviour
                                             else if (fAilments != null && fAilments.freezeCounter <= 0)
                                             {  //just do basic freeze functionality, unless already frozen.
                                                 fAilments.freezeCounter = fAilments.freezeDuration;
-                                                if(e.GetComponent<Projectiles>() != null && e.GetComponent<Projectiles>().isShotFromPlayer)
+                                                if(eProjectiles != null && eProjectiles.isShotFromPlayer)
                                                 {
                                                     fAilments.isFrozenByBountyHunter = true;
                                                 }
@@ -798,10 +802,9 @@ public class Systems : MonoBehaviour
                                         Utilities.SwitchTeam(f);
                                     }
                                 }
-                                if (e.GetComponent<PowerupsIcon>() != null && f.GetComponent<PowerupsApplied>() && fCollisions.receive.temporaryImmunityCounter == 0)
+                                PowerupsIcon ePowerupsIcon = e.GetComponent<PowerupsIcon>();
+                                if (ePowerupsIcon != null && fPowerupsApplied && fCollisions.receive.temporaryImmunityCounter == 0)
                                 { //even though outer block already checks for collision counter, the conditions above this can change that, so I must check again.
-                                    PowerupsIcon ePowerupsIcon = e.GetComponent<PowerupsIcon>();
-                                    PowerupsApplied fPowerupsApplied = f.GetComponent<PowerupsApplied>();
                                     if (ePowerupsIcon.name == PowerupsIcon.Name.Jet)
                                     {
                                         fPowerupsApplied.ApplyJetPowerup();
@@ -820,7 +823,7 @@ public class Systems : MonoBehaviour
                                         Utilities.Heal(f);
                                         Instantiate(gr.CoinCollectNoise);
                                     }
-                                    if (f.GetComponent<Identification>() != null && f.GetComponent<Identification>().name == Identification.Name.Player)
+                                    if (fIdentification != null && fIdentification.name == Identification.Name.Player)
                                     { //if powerup collided with a player, print points. If it collides with an enemy, no points will be printed.
                                         Death death = e.GetComponent<Death>();
                                         if(death != null)
@@ -838,9 +841,8 @@ public class Systems : MonoBehaviour
                                 }
                             }
                         }
-                        if (e.GetComponent<Identification>() != null)
+                        if (eIdentification != null)
                         { //this block is meant to ensure that pulses can only deliver collisions for one frame. Since I don't have a good cooldown mechanism, (and don't want to implement one) this allows me to preserve the visual of the AOE surviving for a few frames without quickly converting and unconverting targets, resulting in a scenario where you could hit an enemy with a convertive pulse and it will end up remaining on its original team.
-                            Identification eIdentification = e.GetComponent<Identification>();
                             if (eIdentification.name == Identification.Name.ConvertivePulse || eIdentification.name == Identification.Name.FreezePulse || eIdentification.name == Identification.Name.Explosion)
                             {
                                 Destroy(e.GetComponent<Collisions>());

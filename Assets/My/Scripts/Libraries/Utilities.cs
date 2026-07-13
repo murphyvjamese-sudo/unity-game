@@ -65,7 +65,7 @@ public static class Utilities
             GameObject returnObj = null;
             foreach (GameObject obj in objects)
             {
-                float thisDist = Math.Distance(o.transform.position.x, o.transform.position.y, obj.transform.position.x, obj.transform.position.y);
+                float thisDist = Math.DistanceSq(o.transform.position.x, o.transform.position.y, obj.transform.position.x, obj.transform.position.y);
                 if (thisDist < minDist)
                 {
                     minDist = thisDist;
@@ -77,9 +77,10 @@ public static class Utilities
     }
     public static class Math
     {  //IMPORTANT: Most of these methods are redundant and unnecessary, as they are often defined on unity's built-in classes, like Mathf, UnityEngine.Random, Vector2, etc. I will probably keep these for now to avoid reworking a lot of my code, but in the future, I should avoid most of these math utilities unless they appear to be very game-specific.
-        public static float Distance(float x1, float y1, float x2, float y2)
-        {
-            return Mathf.Sqrt(Mathf.Pow(x1 - x2, 2) + Mathf.Pow(y1 - y2, 2));  //a^2 + b^2 = c^2
+        public static float DistanceSq(float x1, float y1, float x2, float y2)
+        {  //PERFORMANCE: return the distance squared, since sqrt is a monotonically increasing function, meaning that comparing squared distances always gives the same ordering as actual distances, and if you can avoid the EXPENSIVE sqrt function every frame across thousands of collision checks, you are saving considerable PERFORMANCE gains. (Using multiplication instead of Mathf.Pow is also quicker, even with reusing more variables)
+            //return Mathf.Pow(x1 - x2, 2) + Mathf.Pow(y1 - y2, 2);  //a^2 + b^2 = c^2
+            return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
         }
         public static float WrapAngle(float angle)
         {
@@ -279,25 +280,25 @@ public static class Utilities
         return r / 20;
     }
 
-    public static float MapSize(Collisions collisions)
-    {
+    public static float MapSizeSq(Collisions collisions)
+    {  //Sq is due to the fact that you are comparing squared distances instead of actual distances for performance gains. (See Math.DistanceSq for more detail)
         float r = 0;
         switch (collisions.size)
         {
             case Collisions.Size.Small:
-                r = 3;
+                r = 4;
                 break;
             case Collisions.Size.Medium:
-                r = 5; //previously 4
+                r = 6; //previously 4
                 break;
             case Collisions.Size.Large:
-                r = 8; //previously 10. This is just enough for a jet poweruped terriloomer to still spawn an invasion fighter without immediately crashing into it, so long as Size.Medium remains 6
+                r = 9; //previously 10. This is just enough for a jet poweruped terriloomer to still spawn an invasion fighter without immediately crashing into it, so long as Size.Medium remains 6
                 break;
             case Collisions.Size.ExtraLarge:
                 r = 18; //previously 20
                 break;
         }
-        return r;
+        return r * r;
     }
 
     public static int MapPhysicalAttack(Collisions.Deliver.Damage attack)
@@ -404,7 +405,7 @@ public static class Utilities
             Intelligence selectedSpawnIntelligence = selectedSpawn.GetComponent<Intelligence>();
             Ailments selectedSpawnAilments = selectedSpawn.GetComponent<Ailments>();
             Identification selectedSpawnIdentification = selectedSpawn.GetComponent<Identification>();
-            float collisionAvoidance = MapSize(selectedSpawnCollisions) + MapSize(eCollisions) + 1; //spawn the child ahead of whatever direction the parent is facing by a little more than the sum of their two sizes to avoid immediate collisions.
+            float collisionAvoidance = Mathf.Sqrt(MapSizeSq(selectedSpawnCollisions)) + Mathf.Sqrt(MapSizeSq(eCollisions)); //spawn the child ahead of whatever direction the parent is facing by a little more than the sum of their two sizes to avoid immediate collisions.
             if (collisionAvoidance > 15)
             {
                 collisionAvoidance = 0;  //if this is an AOE, like freeze pulse, position it at exactly the same position as the ship.

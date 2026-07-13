@@ -118,6 +118,7 @@ public class IAPs: MonoBehaviour
     {  //apple/google return which items have already been purchased by the player. Especially important for restoring purchases after someone deletes / reinstalls the app
         Debug.LogWarning("Apple/Google returned historical purchases.");
         
+        bool hasFoundAPurchase = false;
         bool foundGameB = false;
 
         // 1. Loop through already confirmed/paid historical orders
@@ -129,6 +130,7 @@ public class IAPs: MonoBehaviour
                 if (item.Product.definition.id == "com.neatstreet.cosmicchase.gameb")
                 {
                     foundGameB = true;
+                    hasFoundAPurchase = true;
                 }
             }
 
@@ -137,6 +139,11 @@ public class IAPs: MonoBehaviour
         }
 
         // 4. Clean up your "Loading" UI page based on the results
+        if(!hasFoundAPurchase && gs.isRestoringPurchasesManually)
+        {
+            Sgs.NewMenuPage(Sgs.Pages.NoPurchasesToRestore); //if no purchases found, redirect to a menu page telling user no purchases exist to restore, with the option to return home.
+            gs.isRestoringPurchasesManually = false;
+        }
         if (foundGameB)
         {
             Debug.LogWarning("Restore complete! GameB unlocked and UI redirected via GrantProduct.");
@@ -197,7 +204,6 @@ public class IAPs: MonoBehaviour
                 //De\bug.Log("unlocked game b");
                 gs.hasUnlockedGameB = true;
                 Debug.LogWarning("IAP BINGO");
-                Sgs.NewMenuPage(Sgs.Pages.Home);
                 break;
             }
         }
@@ -205,5 +211,6 @@ public class IAPs: MonoBehaviour
         {
             Debug.LogWarning("Jim. Shouldn't happen. Need local vars to reward IAPs");
         }
+        Sgs.NewMenuPage(Sgs.Pages.Home);
     }
 }

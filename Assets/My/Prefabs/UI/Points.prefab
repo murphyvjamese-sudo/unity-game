@@ -28,6 +28,18 @@ PrefabInstance:
       propertyPath: stroke.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: stroke.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: stroke.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4213875402919450854, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
+      propertyPath: stroke.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3657650933984160713, guid: e81a7468370084071807bc7ee04e85a5, type: 3}
       propertyPath: m_Name
       value: Points
@@ -109,6 +121,8 @@ MonoBehaviour:
   freezeCounter: -1
   poisonCounter: -1
   lifespan: 25
+  retainBountyWithPoison: 0
+  isFrozenByBountyHunter: 0
 --- !u!114 &-8099422545449301374
 MonoBehaviour:
   m_ObjectHideFlags: 0

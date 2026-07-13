@@ -1,5 +1,5 @@
 TECHNICAL DESCRIPTION:
-Platform-agnostic, single player retro arcade survival game, featuring top-down, 2D perspective. Utilizes custom shaders, UI, collision, and movement systems.
+Platform-agnostic, single player retro arcade survival game, featuring top-down, 2D perspective. Utilizes custom shaders, UI, collision and movement systems.
 
 MARKETING DESCRIPTION:
 Pilot your humble spaceship across the cosmos, blasting baddies and dodging debris all the way to galactic stardom!
